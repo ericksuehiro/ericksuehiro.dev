@@ -13,16 +13,23 @@ export default function Main() {
                 SUEHIRO
               </span>
             </div>
-            <div className="text-transparent stroke-text text-4xl sm:text-4xl md:text-4xl lg:text-6xl xl:text-8xl">
+            <div className="opacity-50 text-4xl sm:text-4xl md:text-4xl lg:text-6xl xl:text-8xl">
               Full Stack
             </div>
           </div>
 
           <div className="font-thin text-gray-400 md:text-3xl text-xl">
-            <ul className="divide-y !divide-gray-400">
-              <li>Solid experience</li>
-              <li>Tech stack versatility</li>
-              <li>Complex projects XP</li>
+            <ul className="">
+              {[
+                "Solid experience",
+                "Tech stack versatility",
+                "Complex projects XP",
+              ].map((item, index) => (
+                <li key={index} className="flex items-center gap-3">
+                  <div className="h-2 w-2 bg-gradient-to-br from-[#04D361] to-purple-500 animate-gradient-wave bg-[length:200%_200%] animate-spin rounded-sm !border-[var(--header-border-color)]" />
+                  {item}
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -51,10 +58,10 @@ export default function Main() {
           </div>
         </div>
 
-        <div className="p-[10%] flex justify-center row-span-2">
+        <div className="p-5 flex justify-center row-span-2">
           <div className="h-full w-full max-w-[40rem] h-50 max-h-[50rem] rounded-3xl animate-gradient-wave bg-gradient-to-br from-[#04D361] to-purple-500 bg-[length:200%_200%] p-3">
-            <div className="h-full w-full bg-white opacity-35 backdrop-blur-lg rounded-3xl shadow-md">
-
+            <div className="h-full w-full bg-white bg-opacity-35 backdrop-blur-lg rounded-3xl shadow-md flex justify-center items-center">
+              I need to put a picture of myself here :)
             </div>
           </div>
         </div>

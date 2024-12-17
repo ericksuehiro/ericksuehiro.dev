@@ -1,6 +1,5 @@
-import Journey from "./pages/journey";
-import Main from "./pages/main";
-import Header from "./pages/header";
+import Journey from "./components/journey";
+import Main from "./components/main";
 
 export default function Home() {
   return (

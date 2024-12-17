@@ -3,58 +3,113 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-  --border-color: #2d2d2e;
-  --filterInvert: 100%;
-  --header-border-color: hsla(0, 0%, 0%, 0.1);
+	--background: #ffffff;
+	--foreground: #171717;
+	--border-color: #2d2d2e;
+	--filterInvert: 100%;
+	--header-border-color: hsla(0, 0%, 0%, 0.1);
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-    --border-color: #e5e7eb;
-    --filterInvert: 0;
-    --header-border-color: hsla(0, 0%, 100%, 0.1);
-  }
+	:root {
+		--background: #0a0a0a;
+		--foreground: #ededed;
+		--border-color: #e5e7eb;
+		--filterInvert: 0;
+		--header-border-color: hsla(0, 0%, 100%, 0.1);
+	}
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+	color: var(--foreground);
+	background: var(--background);
+	font-family: Arial, Helvetica, sans-serif;
 }
 
 * {
-  border-color: var(--border-color) !important;
+	border-color: var(--border-color) !important;
 }
 
 .stroke-text {
-  -webkit-text-stroke: 1px;
-  -webkit-text-fill-color: transparent;
+	-webkit-text-stroke: 1px;
+	-webkit-text-fill-color: transparent;
 
-  -webkit-text-stroke-color: var(--foreground);
+	-webkit-text-stroke-color: var(--foreground);
 }
 
 @keyframes gradient-wave {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
 }
 
 .animate-gradient-wave {
-  animation: gradient-wave 5s ease infinite;
+	animation: gradient-wave 5s ease infinite;
 }
 
 .mask-gradient {
-  -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
-  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
+	-webkit-mask-image: linear-gradient(
+		to bottom,
+		rgba(0, 0, 0, 1),
+		rgba(0, 0, 0, 0)
+	);
+	mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
 }
 
+.viewCardAnimation {
+	animation: rotateXAnimation linear;
+	animation-timeline: view();
+}
+
+@keyframes rotateXAnimation {
+	0% {
+		transform: perspective(75rem) rotateX(30deg);
+		scale: 1.1;
+	}
+
+	30% {
+		transform: perspective(75rem) rotateX(0deg);
+		scale: 1;
+	}
+}
+
+/* The Game Awards Button */
+.tga-gradient-border {
+	position: relative;
+}
+
+@property --a {
+	syntax: "<angle>";
+	inherits: false;
+	initial-value: 180deg;
+}
+.tga-gradient-border::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	border-radius: inherit;
+	padding: 2px;
+	background: conic-gradient(
+		from var(--a) at 50% 50%,
+		#ffffff14 -54.98deg,
+		#f7c8a3 52.13deg,
+		#fbe3d10d 125.06deg,
+		#fbe3d1 235.09deg,
+		#ffffff14 305.02deg,
+		#f7c8a3 412.13deg
+	);
+	mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+	mask-composite: xor;
+	mask-composite: exclude;
+	transition:--a 0.5s;
+}
+.tga-gradient-border:hover::before {
+	--a: 360deg;
+}
+/* The Game Awards Button */
