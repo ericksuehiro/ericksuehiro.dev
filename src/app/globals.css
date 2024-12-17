@@ -79,7 +79,7 @@ body {
 	}
 }
 
-/* The Game Awards Button */
+/* -The Game Awards Button- */
 .tga-gradient-border {
 	position: relative;
 }
@@ -112,4 +112,4 @@ body {
 .tga-gradient-border:hover::before {
 	--a: 360deg;
 }
-/* The Game Awards Button */
+/* -The Game Awards Button- */
