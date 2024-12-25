@@ -4,7 +4,7 @@ import Image from "next/image";
 export default function Main() {
   return (
     <div className="h-[calc((100vh/14)*13)] min-h-[720px] w-full justify-center md:flex">
-      <div className="h-full rounded-lg grid grid-rows-3 md:grid-cols-2 md:grid-rows-1 max-w-7xl">
+      <div className="h-full rounded-lg grid grid-rows-3 md:grid-cols-2 md:grid-rows-1 w-full max-w-7xl">
         <div className="w-full flex space-y-0 justify-left p-5 pt-[10%] font-bold flex-col">
           <div className="text-5xl sm:text-5xl md:text-5xl lg:text-7xl xl:text-9xl tracking-tight">
             <div>ERICK</div>

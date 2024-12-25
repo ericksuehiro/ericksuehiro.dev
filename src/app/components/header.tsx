@@ -26,7 +26,7 @@ export default function Header() {
       <div className="absolute inset-0 backdrop-blur-sm rounded-xl h-1/2" />
 
       <div
-        className={`h-12 md:h-16 max-w-7xl w-full mr-4 ml-4 border transition-all ease-in-out rounded-lg !backdrop-blur-xl flex items-center md:pl-5 md:pr-5
+        className={`h-12 md:h-16 max-w-7xl w-full mr-4 ml-4 border transition-all ease-in-out rounded-lg !backdrop-blur-xl flex items-center
         ${
           isNotAtTop
             ? "!border-[var(--header-border-color)] shadow-md pl-5 pr-5"
