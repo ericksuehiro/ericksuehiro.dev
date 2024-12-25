@@ -26,15 +26,15 @@ export default function Header() {
       <div className="absolute inset-0 backdrop-blur-sm rounded-xl h-1/2" />
 
       <div
-        className={`h-12 md:h-16 max-w-7xl w-full mr-4 ml-4 border transition-all ease-in-out rounded-lg !backdrop-blur-xl flex items-center pl-5 pr-5
+        className={`h-12 md:h-16 max-w-7xl w-full mr-4 ml-4 border transition-all ease-in-out rounded-lg !backdrop-blur-xl flex items-center md:pl-5 md:pr-5
         ${
           isNotAtTop
-            ? "!border-[var(--header-border-color)] shadow-md"
+            ? "!border-[var(--header-border-color)] shadow-md pl-5 pr-5"
             : "!border-transparent"
         }
         `}
       >
-        <Link href="/">
+        <Link href="/" className=" md:flex">
           <Image
             src="/logo.svg"
             alt="Erick Suehiro Logo"
@@ -46,7 +46,7 @@ export default function Header() {
           />
         </Link>
 
-        <div className="w-full flex justify-end gap-5">
+        <div className="w-full flex justify-end md:justify-end gap-5">
           {[
             // { name: "Home", href: "/" },
             { name: "Projects", href: "/projects" },
@@ -55,8 +55,8 @@ export default function Header() {
           ].map((item) => (
             <Link
               key={item.href}
-              className={`transition-all ease-in-out hover:opacity-100 p-3 ${
-                item.href === path ? "!opacity-100" : ""
+              className={`transition-all ease-in-out hover:opacity-100 p-1 md:p-3 ${
+                item.href === path ? "" : ""
               } active:scale-95 cursor-pointer opacity-50`}
               href={item.href}
             >

@@ -7,7 +7,7 @@ export default function Journey() {
       logoHref: "../santanderLogo.svg",
       time: "2022 - Today",
       position: "Developer",
-      description: `I joined Santander in 2022 as a backend developer, specializing in building microservices with Java and leveraging technologies like Spring. \n Over time, I transitioned to the role of front-end developer within the team, focusing on delivering solutions using Angular as the primary framework.`,
+      description: "I joined Santander in 2022 as a backend developer, specializing in building microservices with Java and leveraging technologies like Spring. \n Over time, I transitioned to the role of front-end developer within the team, focusing on delivering solutions using Angular as the primary framework.",
       color: "from-red-300 to-red-600 top-[calc(10rem)]",
     },
     {
@@ -15,7 +15,7 @@ export default function Journey() {
       logoHref: "../accentureLogo.svg",
       time: "2021 - 2022",
       position: "Analist",
-      description: `I began my journey at Accenture in 2021 as a backend developer, focusing on creating microservices with Java and utilizing technologies such as Camel and Spring. \n A key challenge during this time was leading the migration from IIB to Camel, ensuring a seamless transition and improved performance.`,
+      description: "I began my journey at Accenture in 2021 as a backend developer, focusing on creating microservices with Java and utilizing technologies such as Camel and Spring. \n A key challenge during this time was leading the migration from IIB to Camel, ensuring a seamless transition and improved performance.",
       color: "from-purple-300 to-purple-600 top-[calc(10rem+10px)]",
     },
   ];
@@ -26,7 +26,7 @@ export default function Journey() {
       }vh] border-t !border-t-[var(--header-border-color)] bg-gradient-to-b from-[#ffffff03] animate-gradient-wave flex justify-center items-center overflow-clip flex-col`}
     >
       <h1 className="h-20 flex items-center sticky top-14 font-bold text-xl">My Journey</h1>
-      <div className="flex flex-col md:flex-row w-full max-w-7xl md:justify-around">
+      <div className="flex flex-col md:flex-row w-full max-w-7xl md:justify-center md:gap-5">
         {cards.map((item, index) => (
           <div
             key={index}
@@ -41,7 +41,7 @@ export default function Journey() {
                   alt={`${item.name} Logo`}
                   width={200}
                   height={50}
-                  className={`transition-all ease-in-out mb-2`}
+                  className={"transition-all ease-in-out mb-2"}
                 />
               </div>
               <div className="h-[calc(100%-5rem)] w-full pt-5 text-2xl flex flex-col text-white">

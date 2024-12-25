@@ -33,7 +33,7 @@ export default function Main() {
             </ul>
           </div>
 
-          <div className="flex gap-5 h-full items-start  pt-[calc((100vh/14)+10%)] absolute top-0 right-5 flex-col md:pt-10 md:relative md:right-0 md:gap-10 md:flex-row">
+          <div className="flex gap-3 h-full items-start  pt-[calc((100vh/14)+10%)] absolute top-0 right-5 flex-col md:pt-10 md:relative md:right-0 md:gap-3 md:flex-row">
             <Link href={"https://github.com/ericksuehiro"} target="_blank">
               <Image
                 src="/githubLogo.svg"
