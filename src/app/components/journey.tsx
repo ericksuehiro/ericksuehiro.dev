@@ -27,9 +27,9 @@ export default function Journey() {
     >
       <h1 className="h-20 flex items-center sticky top-14 font-bold text-xl">My Journey</h1>
       <div className="flex flex-col md:flex-row w-full max-w-7xl md:justify-center md:gap-5">
-        {cards.map((item, index) => (
+        {cards.map((item) => (
           <div
-            key={index}
+            key={item.name}
             className={`flex items-center justify-center mb-10 sticky ${item.color}`}
           >
             <div
@@ -47,8 +47,8 @@ export default function Journey() {
               <div className="h-[calc(100%-5rem)] w-full pt-5 text-2xl flex flex-col text-white">
                 {/* <p className="w-full flex justify-center">{item.position}</p> */}
                 <div className="text-base text-center opacity-85 pt-2">
-                  {item.description.split("\n").map((line, index) => (
-                    <p key={index}>{line}</p>
+                  {item.description.split("\n").map((line) => (
+                    <p key={line}>{line}</p>
                   ))}
                 </div>
                 <footer className="text-base text-center mt-auto">

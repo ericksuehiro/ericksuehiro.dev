@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function Main() {
   return (
-    <div className="h-[calc((100vh/14)*13)] w-full justify-center md:flex">
+    <div className="h-[calc((100vh/14)*13)] min-h-[720px] w-full justify-center md:flex">
       <div className="h-full rounded-lg grid grid-rows-3 md:grid-cols-2 md:grid-rows-1 max-w-7xl">
         <div className="w-full flex space-y-0 justify-left p-5 pt-[10%] font-bold flex-col">
           <div className="text-5xl sm:text-5xl md:text-5xl lg:text-7xl xl:text-9xl">
@@ -24,8 +24,8 @@ export default function Main() {
                 "Solid experience",
                 "Tech stack versatility",
                 "Complex projects XP",
-              ].map((item, index) => (
-                <li key={index} className="flex items-center gap-3">
+              ].map((item) => (
+                <li key={item} className="flex items-center gap-3">
                   <div className="h-2 w-2 bg-gradient-to-br from-[#04D361] to-purple-500 animate-gradient-wave bg-[length:200%_200%] animate-spin rounded-sm !border-[var(--header-border-color)]" />
                   {item}
                 </li>
