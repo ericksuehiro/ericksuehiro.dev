@@ -5,7 +5,7 @@ export default function Main() {
   return (
     <div className="h-[calc((100vh/14)*13)] min-h-[720px] w-full justify-center md:flex">
       <div className="h-full rounded-lg grid grid-rows-3 md:grid-cols-2 md:grid-rows-1 w-full max-w-7xl">
-        <div className="w-full flex space-y-0 justify-left p-5 pt-[10%] font-bold flex-col">
+        <div className="w-full flex space-y-0 justify-left p-5 md:pl-2 pt-[10%] font-bold flex-col">
           <div className="text-5xl sm:text-5xl md:text-5xl lg:text-7xl xl:text-9xl tracking-tight">
             <div>ERICK</div>
             <div className="!-mt-[10px] sm:!-mt-[10px] md:!-mt-[10px] lg:!-mt-[10x] xl:!-mt-[30px]">
@@ -59,7 +59,7 @@ export default function Main() {
           </div>
         </div>
 
-        <div className="p-5 flex justify-center row-span-2">
+        <div className="p-5 md:pr-2 flex justify-center row-span-2">
           <div className="h-full w-full max-w-[40rem] h-50 max-h-[50rem] rounded-3xl animate-gradient-wave bg-gradient-to-br from-[#04D361] to-purple-500 bg-[length:200%_200%] p-3">
             <div className="h-full w-full bg-white bg-opacity-35 backdrop-blur-lg rounded-3xl shadow-md flex justify-center items-center">
               I need to put a picture of myself here :)
