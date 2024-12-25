@@ -6,21 +6,22 @@ export default function Main() {
     <div className="h-[calc((100vh/14)*13)] min-h-[720px] w-full justify-center md:flex">
       <div className="h-full rounded-lg grid grid-rows-3 md:grid-cols-2 md:grid-rows-1 max-w-7xl">
         <div className="w-full flex space-y-0 justify-left p-5 pt-[10%] font-bold flex-col">
-          <div className="text-5xl sm:text-5xl md:text-5xl lg:text-7xl xl:text-9xl">
+          <div className="text-5xl sm:text-5xl md:text-5xl lg:text-7xl xl:text-9xl tracking-tight">
             <div>ERICK</div>
             <div className="!-mt-[10px] sm:!-mt-[10px] md:!-mt-[10px] lg:!-mt-[10x] xl:!-mt-[30px]">
               <span className="text-transparent bg-clip-text animate-gradient-wave bg-gradient-to-br from-[#04D361] to-purple-500 bg-[length:200%_200%]">
                 SUEHIRO
               </span>
             </div>
-            <div className="opacity-50 text-4xl sm:text-4xl md:text-4xl lg:text-6xl xl:text-8xl">
+            {/* <div className="opacity-50 text-4xl sm:text-4xl md:text-4xl lg:text-6xl xl:text-8xl">
               Full Stack
-            </div>
+            </div> */}
           </div>
 
           <div className="font-thin text-gray-400 md:text-3xl text-xl">
             <ul className="">
               {[
+                "Full Stack",
                 "Solid experience",
                 "Tech stack versatility",
                 "Complex projects XP",
