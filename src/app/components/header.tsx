@@ -7,6 +7,8 @@ import Image from "next/image";
 
 export default function Header() {
   const path = usePathname();
+  console.log(path);
+  
 
   const [isNotAtTop, setIsNotAtTop] = useState(false);
 
@@ -56,7 +58,7 @@ export default function Header() {
             <Link
               key={item.href}
               className={`transition-all ease-in-out hover:opacity-100 p-1 md:p-3 ${
-                item.href === path ? "opacity-100" : ""
+                item.href === path ? "!opacity-100" : ""
               } active:scale-95 cursor-pointer opacity-50`}
               href={item.href}
             >
