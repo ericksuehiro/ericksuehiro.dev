@@ -4,6 +4,7 @@ export default function ILearned() {
 	const codes = [
 		{
 			title: "The Game Awards 2024 Button",
+			bgColor: "bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500",
 			content: (
 				<>
 					{/* Styles */}
@@ -103,10 +104,90 @@ export default function ILearned() {
         </>
 			`,
 		},
+		{
+			title: "The Gooey Effect Header",
+			bgColor: "bg-gradient-to-r from-yellow-500 via-red-500 to-pink-700",
+			content: (
+				<>
+					<div className="[filter:url('#goo')] flex transition-all">
+						{["Home", "About", "Contact", "Links"].map((headerTitle) => (
+							<div
+								key={headerTitle}
+								className="bg-black transition-all duration-300 p-3 pl-5 pr-5 hover:ml-5 hover:mr-5 hover:bg-blue-600 hover:cursor-pointer"
+							>
+								{headerTitle}
+							</div>
+						))}
+					</div>
+
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						version="1.1"
+						className="hidden"
+					>
+						<title>Gooey Effect SVG</title>
+						<defs>
+							<filter id="goo">
+								<feGaussianBlur
+									in="SourceGraphic"
+									stdDeviation="10"
+									result="blur"
+								/>
+								<feColorMatrix
+									in="blur"
+									mode="matrix"
+									values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9"
+									result="goo"
+								/>
+								<feComposite in="SourceGraphic" in2="goo" operator="atop" />
+							</filter>
+						</defs>
+					</svg>
+				</>
+			),
+			contentToCopy: `
+			<>
+					<div className="[filter:url('#goo')] flex transition-all">
+						{["Home", "About", "Contact", "Links"].map((headerTitle) => (
+							<div
+								key={headerTitle}
+								className="bg-black transition-all duration-300 p-3 pl-5 pr-5 hover:ml-5 hover:mr-5 hover:bg-blue-600 hover:cursor-pointer"
+							>
+								{headerTitle}
+							</div>
+						))}
+					</div>
+
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						version="1.1"
+						className="hidden"
+					>
+						<title>Gooey Effect SVG</title>
+						<defs>
+							<filter id="goo">
+								<feGaussianBlur
+									in="SourceGraphic"
+									stdDeviation="10"
+									result="blur"
+								/>
+								<feColorMatrix
+									in="blur"
+									mode="matrix"
+									values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9"
+									result="goo"
+								/>
+								<feComposite in="SourceGraphic" in2="goo" operator="atop" />
+							</filter>
+						</defs>
+					</svg>
+				</>
+			`,
+		},
 	];
 
 	return (
-		<div className="flex flex-col justify-start content-start h-full min-h-screen w-full p-6 max-w-7xl mx-auto place-content-center">
+		<div className="flex flex-col justify-start content-start h-full min-h-screen w-full p-6 pl-1 pr-1 max-w-7xl mx-auto place-content-center">
 			<div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3">
 				{codes.map((code) => (
 					<div
@@ -114,12 +195,14 @@ export default function ILearned() {
 						className="border !border-[var(--header-border-color)] h-64 w-full rounded-lg shadow-md grid grid-rows-[20%,55%,25%] p-3 pb-0 pt-0"
 					>
 						<div className="flex justify-center items-center">{code.title}</div>
-						<div className="h-full w-full rounded-lg bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 flex justify-center items-center">
+						<div
+							className={`h-full w-full rounded-lg flex ${code.bgColor} justify-center items-center`}
+						>
 							{code.content}
 						</div>
 						<div className="flex justify-center items-center">
 							<button
-							className="active:scale-95 transition-all border-b !border-b-transparent hover:!border-b-white"
+								className="active:scale-95 transition-all border-b !border-b-transparent hover:!border-b-white"
 								type="button"
 								onClick={() =>
 									navigator.clipboard.writeText(code.contentToCopy)
