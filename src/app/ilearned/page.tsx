@@ -109,7 +109,7 @@ export default function ILearned() {
 			bgColor: "bg-gradient-to-r from-yellow-500 via-red-500 to-pink-700",
 			content: (
 				<>
-					<div className="[filter:url('#goo')] flex transition-all">
+					<div className="[filter:url('#goo')] flex transition-all scale-75 md:scale-100">
 						{["Home", "About", "Contact", "Links"].map((headerTitle) => (
 							<div
 								key={headerTitle}
@@ -147,7 +147,7 @@ export default function ILearned() {
 			),
 			contentToCopy: `
 			<>
-					<div className="[filter:url('#goo')] flex transition-all">
+					<div className="[filter:url('#goo')] flex transition-all scale-75 md:scale-100">
 						{["Home", "About", "Contact", "Links"].map((headerTitle) => (
 							<div
 								key={headerTitle}
@@ -187,7 +187,7 @@ export default function ILearned() {
 	];
 
 	return (
-		<div className="flex flex-col justify-start content-start h-full min-h-screen w-full p-6 pl-1 pr-1 max-w-7xl mx-auto place-content-center">
+		<div className="flex flex-col justify-start content-start h-full min-h-screen w-full p-6 md:pl-1 md:pr-1 max-w-7xl mx-auto place-content-center">
 			<div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3">
 				{codes.map((code) => (
 					<div
@@ -196,7 +196,7 @@ export default function ILearned() {
 					>
 						<div className="flex justify-center items-center">{code.title}</div>
 						<div
-							className={`h-full w-full rounded-lg flex ${code.bgColor} justify-center items-center`}
+							className={`h-full w-full rounded-lg flex ${code.bgColor} justify-center items-center overflow-hidden`}
 						>
 							{code.content}
 						</div>
