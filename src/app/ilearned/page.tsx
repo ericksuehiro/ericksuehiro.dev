@@ -113,7 +113,7 @@ export default function ILearned() {
 						{["Home", "About", "Contact", "Links"].map((headerTitle) => (
 							<div
 								key={headerTitle}
-								className="bg-black transition-all duration-300 p-3 pl-5 pr-5 hover:ml-5 hover:mr-5 hover:bg-blue-600 hover:cursor-pointer"
+								className="bg-black transition-all duration-300 p-3 pl-5 pr-5 hover:ml-5 hover:mr-5 hover:bg-blue-600 hover:cursor-pointer select-none"
 							>
 								{headerTitle}
 							</div>
@@ -151,7 +151,7 @@ export default function ILearned() {
 						{["Home", "About", "Contact", "Links"].map((headerTitle) => (
 							<div
 								key={headerTitle}
-								className="bg-black transition-all duration-300 p-3 pl-5 pr-5 hover:ml-5 hover:mr-5 hover:bg-blue-600 hover:cursor-pointer"
+								className="bg-black transition-all duration-300 p-3 pl-5 pr-5 hover:ml-5 hover:mr-5 hover:bg-blue-600 hover:cursor-pointer select-none"
 							>
 								{headerTitle}
 							</div>
