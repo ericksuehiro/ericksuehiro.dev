@@ -113,7 +113,7 @@ export default function ILearned() {
 						{["Home", "About", "Contact", "Links"].map((headerTitle) => (
 							<div
 								key={headerTitle}
-								className="bg-black transition-all duration-300 p-3 pl-5 pr-5 hover:ml-5 hover:mr-5 hover:bg-blue-600 hover:cursor-pointer select-none"
+								className="bg-black transition-all duration-300 p-3 pl-5 pr-5 hover:ml-5 hover:mr-5 hover:bg-blue-600 hover:cursor-pointer select-none !text-white"
 							>
 								{headerTitle}
 							</div>
@@ -151,7 +151,7 @@ export default function ILearned() {
 						{["Home", "About", "Contact", "Links"].map((headerTitle) => (
 							<div
 								key={headerTitle}
-								className="bg-black transition-all duration-300 p-3 pl-5 pr-5 hover:ml-5 hover:mr-5 hover:bg-blue-600 hover:cursor-pointer select-none"
+								className="bg-black transition-all duration-300 p-3 pl-5 pr-5 hover:ml-5 hover:mr-5 hover:bg-blue-600 hover:cursor-pointer select-none !text-white"
 							>
 								{headerTitle}
 							</div>
@@ -202,7 +202,7 @@ export default function ILearned() {
 						</div>
 						<div className="flex justify-center items-center">
 							<button
-								className="active:scale-95 transition-all border-b !border-b-transparent hover:!border-b-white !text-white"
+								className="active:scale-95 transition-all border-b !border-b-transparent hover:!border-b-white"
 								type="button"
 								onClick={() =>
 									navigator.clipboard.writeText(code.contentToCopy)
