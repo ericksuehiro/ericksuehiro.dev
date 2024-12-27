@@ -202,7 +202,7 @@ export default function ILearned() {
 						</div>
 						<div className="flex justify-center items-center">
 							<button
-								className="active:scale-95 transition-all border-b !border-b-transparent hover:!border-b-white"
+								className="active:scale-95 transition-all border-b !border-b-transparent hover:!border-b-white !text-white"
 								type="button"
 								onClick={() =>
 									navigator.clipboard.writeText(code.contentToCopy)
