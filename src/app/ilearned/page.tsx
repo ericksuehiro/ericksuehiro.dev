@@ -189,17 +189,17 @@ export default function ILearned() {
 			bgColor: "bg-white",
 			content: (
 				<>
-					<div className="hover:mt-2 cursor-pointer select-none transition-all ease-in-out font-comic">
-						<div className="absolute text-black bg-white p-1 !border-black border-2 transition-all ease-in-out hover:-ml-1 hover:-mt-1 active:!ml-0 active:!mt-0">Click</div>
-						<div className="border-2 !border-black p-1 text-transparent bg-black">Click</div>
+					<div className="hover:mt-2 cursor-pointer select-none transition-all ease-in-out font-comic text-2xl">
+						<div className="absolute text-black bg-white p-2 !border-black border-2 transition-all ease-in-out hover:-ml-1 hover:-mt-1 active:!ml-0 active:!mt-0">Click</div>
+						<div className="border-2 !border-black p-2 text-transparent bg-black">Click</div>
 					</div>
 				</>
 			),
 			contentToCopy: `
 			<>
-					<div className="hover:mt-2 cursor-pointer select-none transition-all ease-in-out font-comic">
-						<div className="absolute text-black bg-white p-1 !border-black border-2 transition-all ease-in-out hover:-ml-1 hover:-mt-1 active:!ml-0 active:!mt-0">Click</div>
-						<div className="border-2 !border-black p-1 text-transparent bg-black">Click</div>
+					<div className="hover:mt-2 cursor-pointer select-none transition-all ease-in-out font-comic text-2xl">
+						<div className="absolute text-black bg-white p-2 !border-black border-2 transition-all ease-in-out hover:-ml-1 hover:-mt-1 active:!ml-0 active:!mt-0">Click</div>
+						<div className="border-2 !border-black p-2 text-transparent bg-black">Click</div>
 					</div>
 				</>
 			`,
