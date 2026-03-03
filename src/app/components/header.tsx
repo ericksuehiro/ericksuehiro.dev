@@ -52,7 +52,6 @@ export default function Header() {
           {[
             // { name: "Home", href: "/" },
             { name: "Projects", href: "/projects" },
-            { name: "Contact", href: "/contact" },
           ].map((item) => (
             <Link
               key={item.href}
