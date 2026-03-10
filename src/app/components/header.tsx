@@ -24,13 +24,13 @@ export default function Header() {
   }, []);
 
   return (
-    <div className={`fixed top-0 left-0 right-0 z-50 h-14 md:h-20 flex justify-center items-end md:px-4 ${isNotAtTop ? "px-4" : "px-0"} transition-all ease-in-out`}>
+    <div className="fixed top-0 left-0 right-0 z-50 h-14 md:h-20 flex justify-center items-end px-4">
       <div
-        className={`relative h-12 md:h-16 max-w-5xl w-full mx-auto px-5 border transition-all ease-in-out rounded-lg backdrop-blur-xl flex items-center
+        className={`relative h-12 md:h-16 max-w-5xl w-full mx-auto md:px-5 border transition-all ease-in-out rounded-lg backdrop-blur-xl flex items-center
         ${
           isNotAtTop
-            ? "!border-[var(--header-border-color)] shadow-md bg-[var(--background)]/80"
-            : "!border-transparent"
+            ? "!border-[var(--header-border-color)] shadow-md bg-[var(--background)]/80 px-5"
+            : "!border-transparent px-0"
         }
         `}
       >
