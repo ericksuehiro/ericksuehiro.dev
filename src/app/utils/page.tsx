@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import Prism from "prismjs";
 import "prismjs/components/prism-markup";
+import "prismjs/components/prism-json";
 import { useI18n } from "../i18n/context";
 
 const FAVORITES_KEY = "utils-favorites";
@@ -825,7 +826,7 @@ function HtmlPreview() {
             <span className="text-xs uppercase tracking-wider opacity-40 font-medium">{strings.code}</span>
           </div>
           <div className="relative">
-            <div className="rounded-xl border !border-[var(--header-border-color)] overflow-hidden h-[300px] md:h-[400px] bg-[#1a1a2e] relative">
+            <div className="rounded-xl border !border-[var(--header-border-color)] overflow-hidden h-[300px] md:h-[400px] bg-[#111111] relative">
               {/* Highlighted code (visual layer) */}
               <pre
                 ref={highlightRef}
@@ -847,7 +848,7 @@ function HtmlPreview() {
                 onScroll={handleScroll}
                 onBlur={() => setTimeout(() => setSuggestions([]), 150)}
                 placeholder={strings.placeholder}
-                className="absolute inset-0 w-full h-full p-4 bg-transparent text-transparent caret-indigo-400 text-sm font-mono leading-relaxed focus:outline-none resize-none z-10"
+                className="absolute inset-0 w-full h-full p-4 bg-transparent text-transparent caret-emerald-400 text-sm font-mono leading-relaxed focus:outline-none resize-none z-10"
                 spellCheck={false}
                 style={{ whiteSpace: "pre", overflowX: "auto", overflowWrap: "normal" }}
               />
@@ -855,7 +856,7 @@ function HtmlPreview() {
 
             {/* Autocomplete dropdown — follows caret */}
             {suggestions.length > 0 && (
-              <div className="absolute z-20 w-64 bg-[#12122a] border !border-indigo-500/20 rounded-lg shadow-xl shadow-black/40 overflow-hidden"
+              <div className="absolute z-20 w-64 bg-[#111111] border !border-emerald-500/20 rounded-lg shadow-xl shadow-black/40 overflow-hidden"
                 style={{ maxHeight: "200px", top: caretPos.top + 24, left: Math.min(caretPos.left, 200) }}
               >
                 {suggestions.map((s, i) => (
@@ -865,7 +866,7 @@ function HtmlPreview() {
                     onMouseDown={(e) => { e.preventDefault(); applySuggestion(s); }}
                     className={`w-full text-left px-3 py-1.5 text-xs font-mono transition-colors duration-75 flex items-center gap-2 ${
                       i === selectedSuggestion
-                        ? "bg-indigo-500/20 text-indigo-300"
+                        ? "bg-emerald-500/20 text-emerald-300"
                         : "text-gray-400 hover:bg-white/5"
                     }`}
                   >
@@ -976,8 +977,30 @@ function ApiTester() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [copiedResponse, setCopiedResponse] = useState(false);
+  const bodyTextareaRef = useRef<HTMLTextAreaElement>(null);
+  const bodyHighlightRef = useRef<HTMLPreElement>(null);
   const { t } = useI18n();
   const strings = t.utils.apiTester;
+
+  // Syntax highlight body input
+  const highlightedBody = useMemo(() => {
+    if (!body) return "";
+    try {
+      JSON.parse(body);
+      return Prism.highlight(body, Prism.languages.json, "json");
+    } catch {
+      return Prism.highlight(body, Prism.languages.json, "json");
+    }
+  }, [body]);
+
+  // Sync scroll between body textarea and highlight overlay
+  const handleBodyScroll = useCallback(() => {
+    if (bodyTextareaRef.current && bodyHighlightRef.current) {
+      bodyHighlightRef.current.scrollTop = bodyTextareaRef.current.scrollTop;
+      bodyHighlightRef.current.scrollLeft = bodyTextareaRef.current.scrollLeft;
+    }
+  }, []);
 
   // Persist state to localStorage
   useEffect(() => {
@@ -1106,6 +1129,17 @@ function ApiTester() {
       return response.body;
     }
   }, [response?.body]);
+
+  // Syntax highlight response body
+  const highlightedResponse = useMemo(() => {
+    if (!formattedBody) return "";
+    try {
+      JSON.parse(formattedBody);
+      return Prism.highlight(formattedBody, Prism.languages.json, "json");
+    } catch {
+      return formattedBody.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+  }, [formattedBody]);
 
   return (
     <div className="p-6 md:p-8 space-y-4" onKeyDown={handleKeyDown}>
@@ -1242,13 +1276,25 @@ function ApiTester() {
 
       {/* Body tab */}
       {activeTab === "body" && (
-        <textarea
-          value={body}
-          onChange={(e) => setBody(e.target.value)}
-          placeholder={'{\n  "key": "value"\n}'}
-          className="w-full h-[180px] p-4 rounded-xl border !border-[var(--header-border-color)] bg-transparent text-sm font-mono leading-relaxed opacity-70 focus:opacity-100 focus:outline-none focus:!border-amber-400/40 transition-all duration-300 resize-none"
-          spellCheck={false}
-        />
+        <div className="relative rounded-xl border !border-[var(--header-border-color)] overflow-hidden h-[180px] bg-[#111111]/30 transition-all duration-300 focus-within:!border-amber-400/40">
+          <pre
+            ref={bodyHighlightRef}
+            className="absolute inset-0 p-4 text-sm font-mono leading-relaxed overflow-hidden pointer-events-none m-0"
+            aria-hidden="true"
+            dangerouslySetInnerHTML={{ __html: highlightedBody + "\n" }}
+            style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}
+          />
+          <textarea
+            ref={bodyTextareaRef}
+            value={body}
+            onChange={(e) => setBody(e.target.value)}
+            onScroll={handleBodyScroll}
+            placeholder={'{\n  "key": "value"\n}'}
+            className="absolute inset-0 w-full h-full p-4 bg-transparent text-transparent caret-amber-400 text-sm font-mono leading-relaxed focus:outline-none resize-none z-10"
+            spellCheck={false}
+            style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}
+          />
+        </div>
       )}
 
       {/* Error */}
@@ -1294,10 +1340,36 @@ function ApiTester() {
           )}
 
           {/* Response body */}
-          <div className="rounded-xl border !border-[var(--header-border-color)] overflow-hidden relative">
-            <pre className="p-4 text-sm font-mono leading-relaxed opacity-70 max-h-[400px] overflow-auto whitespace-pre-wrap break-words">
-              {formattedBody || " "}
-            </pre>
+          <div className="group/resp rounded-xl border !border-[var(--header-border-color)] overflow-hidden relative bg-[#111111]/30">
+            <button
+              type="button"
+              onClick={() => {
+                navigator.clipboard.writeText(formattedBody);
+                setCopiedResponse(true);
+                setTimeout(() => setCopiedResponse(false), 2000);
+              }}
+              className={`absolute top-3 right-3 z-10 flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border !border-[var(--header-border-color)] bg-[var(--background)]/80 backdrop-blur-sm text-[11px] transition-all duration-200 hover:!border-amber-400/40 ${copiedResponse ? "opacity-100" : "opacity-0 group-hover/resp:opacity-100"}`}
+            >
+              {copiedResponse ? (
+                <>
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3.5 h-3.5 text-emerald-400">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                  </svg>
+                  <span className="text-emerald-400">{strings.copied}</span>
+                </>
+              ) : (
+                <>
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-3.5 h-3.5 opacity-60">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.666 3.888A2.25 2.25 0 0013.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 01-.75.75H9.75a.75.75 0 01-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 01-2.25 2.25H6.75A2.25 2.25 0 014.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 011.927-.184" />
+                  </svg>
+                  <span className="opacity-60">{strings.copyResponse}</span>
+                </>
+              )}
+            </button>
+            <pre
+              className="p-4 text-sm font-mono leading-relaxed max-h-[400px] overflow-auto whitespace-pre-wrap break-words"
+              dangerouslySetInnerHTML={{ __html: highlightedResponse || " " }}
+            />
             <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-[var(--background)] to-transparent pointer-events-none" />
           </div>
         </div>

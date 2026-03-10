@@ -116,6 +116,7 @@ const translations = {
         addHeader: "Add header",
         copyAsCurl: "Copy as cURL",
         copied: "Copied!",
+        copyResponse: "Copy",
         noResponse: "Send a request to see the response",
         error: "Request failed",
       },
@@ -242,6 +243,7 @@ const translations = {
         addHeader: "Adicionar header",
         copyAsCurl: "Copiar como cURL",
         copied: "Copiado!",
+        copyResponse: "Copiar",
         noResponse: "Envie uma requisição para ver a resposta",
         error: "Requisição falhou",
       },
@@ -326,6 +328,7 @@ export type Translations = {
       addHeader: string;
       copyAsCurl: string;
       copied: string;
+      copyResponse: string;
       noResponse: string;
       error: string;
     };

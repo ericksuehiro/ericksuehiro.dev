@@ -154,33 +154,41 @@ body {
 	}
 }
 
-/* Prism.js syntax highlighting */
+/* Prism.js syntax highlighting — follows site palette */
 .token.tag,
-.token.tag .punctuation { color: #f472b6; }
+.token.tag .punctuation { color: #04D361; }
 .token.attr-name { color: #c084fc; }
 .token.attr-value,
 .token.attr-value .punctuation { color: #34d399; }
-.token.comment { color: #6b7280; font-style: italic; }
+.token.comment { color: #525252; font-style: italic; }
 .token.doctype,
-.token.prolog { color: #6b7280; }
-.token.entity { color: #fbbf24; }
+.token.prolog { color: #525252; }
+.token.entity { color: #c084fc; }
 .token.boolean,
-.token.number { color: #f59e0b; }
+.token.number { color: #a855f7; }
 .token.string { color: #34d399; }
-.token.keyword { color: #818cf8; }
-.token.function { color: #60a5fa; }
-.token.operator { color: #94a3b8; }
+.token.keyword { color: #04D361; }
+.token.function { color: #c084fc; }
+.token.operator { color: #737373; }
+.token.property { color: #04D361; }
+.token.null { color: #a855f7; }
+.token.punctuation { color: #525252; }
 
 @media (prefers-color-scheme: light) {
 	.token.tag,
-	.token.tag .punctuation { color: #be185d; }
+	.token.tag .punctuation { color: #059669; }
 	.token.attr-name { color: #7c3aed; }
 	.token.attr-value,
 	.token.attr-value .punctuation { color: #059669; }
-	.token.comment { color: #9ca3af; font-style: italic; }
+	.token.comment { color: #a3a3a3; font-style: italic; }
 	.token.string { color: #059669; }
-	.token.keyword { color: #4f46e5; }
-	.token.function { color: #2563eb; }
+	.token.keyword { color: #059669; }
+	.token.function { color: #7c3aed; }
+	.token.boolean,
+	.token.number { color: #7c3aed; }
+	.token.property { color: #059669; }
+	.token.null { color: #7c3aed; }
+	.token.punctuation { color: #a3a3a3; }
 }
 
 /* -The Game Awards Button- */
