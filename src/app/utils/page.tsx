@@ -309,14 +309,15 @@ export default function Utils() {
       </aside>
 
       {/* Main content */}
-      <main className="flex-1 min-w-0 px-4 sm:px-6 md:px-8 pt-4 md:pt-6 pb-12 overflow-y-auto">
+      <main className="flex-1 min-w-0 min-h-0 px-4 sm:px-6 md:px-8 pt-4 md:pt-6 pb-4 overflow-y-auto flex flex-col">
         {activeToolData && (
           <div
             key={activeTool}
+            className="flex flex-col flex-1 min-h-0"
             style={{ animation: "util-fade-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) both" }}
           >
             {/* Tool header */}
-            <div className="flex items-center gap-4 mb-6">
+            <div className="flex items-center gap-4 mb-4 shrink-0">
               <div
                 className={`shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br ${activeToolData.gradient} text-white flex items-center justify-center shadow-lg [&>svg]:w-5 [&>svg]:h-5`}
               >
@@ -329,10 +330,12 @@ export default function Utils() {
             </div>
 
             {/* Tool content */}
-            {activeTool === "pdf-to-text" && <PdfToText />}
-            {activeTool === "html-preview" && <HtmlPreview />}
-            {activeTool === "text-diff" && <TextDiff />}
-            {activeTool === "api-tester" && <ApiTester />}
+            <div className="flex-1 min-h-0">
+              {activeTool === "pdf-to-text" && <PdfToText />}
+              {activeTool === "html-preview" && <HtmlPreview />}
+              {activeTool === "text-diff" && <TextDiff />}
+              {activeTool === "api-tester" && <ApiTester />}
+            </div>
           </div>
         )}
       </main>
@@ -908,18 +911,18 @@ function HtmlPreview() {
   }, [suggestions, selectedSuggestion, applySuggestion]);
 
   return (
-    <div className="p-6 md:p-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="flex flex-col h-full">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1 min-h-0">
         {/* Code editor with syntax highlighting */}
-        <div className="flex flex-col">
-          <div className="flex items-center gap-2 mb-2">
+        <div className="flex flex-col min-h-0">
+          <div className="flex items-center gap-2 mb-2 shrink-0">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 opacity-40">
               <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5" />
             </svg>
             <span className="text-xs uppercase tracking-wider opacity-40 font-medium">{strings.code}</span>
           </div>
-          <div className="relative">
-            <div className="rounded-xl border !border-[var(--header-border-color)] overflow-hidden h-[300px] md:h-[400px] bg-[#111111] relative">
+          <div className="relative flex-1 min-h-0">
+            <div className="rounded-xl border !border-[var(--header-border-color)] overflow-hidden h-full bg-[#111111] relative">
               {/* Highlighted code (visual layer) */}
               <pre
                 ref={highlightRef}
@@ -982,15 +985,15 @@ function HtmlPreview() {
         </div>
 
         {/* Preview */}
-        <div className="flex flex-col">
-          <div className="flex items-center gap-2 mb-2">
+        <div className="flex flex-col min-h-0">
+          <div className="flex items-center gap-2 mb-2 shrink-0">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 opacity-40">
               <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
             <span className="text-xs uppercase tracking-wider opacity-40 font-medium">{strings.preview}</span>
           </div>
-          <div className="rounded-xl border !border-[var(--header-border-color)] overflow-hidden h-[300px] md:h-[400px]">
+          <div className="rounded-xl border !border-[var(--header-border-color)] overflow-hidden flex-1 min-h-0">
             <iframe
               title="HTML Preview"
               sandbox="allow-scripts"
