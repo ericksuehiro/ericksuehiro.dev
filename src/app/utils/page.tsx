@@ -1245,7 +1245,7 @@ function ApiTester() {
         <textarea
           value={body}
           onChange={(e) => setBody(e.target.value)}
-          placeholder='{\n  "key": "value"\n}'
+          placeholder={'{\n  "key": "value"\n}'}
           className="w-full h-[180px] p-4 rounded-xl border !border-[var(--header-border-color)] bg-transparent text-sm font-mono leading-relaxed opacity-70 focus:opacity-100 focus:outline-none focus:!border-amber-400/40 transition-all duration-300 resize-none"
           spellCheck={false}
         />
