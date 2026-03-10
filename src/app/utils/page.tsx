@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef, useMemo } from "react";
+import { useState, useEffect, useCallback, useRef, useMemo, Suspense } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import Prism from "prismjs";
 import "prismjs/components/prism-markup";
 import "prismjs/components/prism-json";
@@ -28,9 +29,31 @@ function toggleFavorite(toolId: string): string[] {
   return favs;
 }
 
-export default function Utils() {
+const VALID_TOOLS = ["pdf-to-text", "html-preview", "text-diff", "api-tester"];
+
+export default function UtilsPage() {
+  return (
+    <Suspense>
+      <Utils />
+    </Suspense>
+  );
+}
+
+function Utils() {
   const [mounted, setMounted] = useState(false);
-  const [activeTool, setActiveTool] = useState<string | null>(null);
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const toolParam = searchParams.get("tool");
+  const activeTool = toolParam && VALID_TOOLS.includes(toolParam) ? toolParam : null;
+
+  const setActiveTool = useCallback((toolId: string | null) => {
+    if (toolId) {
+      router.push(`/utils?tool=${toolId}`, { scroll: false });
+    } else {
+      router.push("/utils", { scroll: false });
+    }
+  }, [router]);
+
   const [favorites, setFavorites] = useState<string[]>(() => {
     if (typeof window !== "undefined") return getFavorites();
     return [];
@@ -113,7 +136,7 @@ export default function Utils() {
 
   const handleSelectTool = useCallback((toolId: string) => {
     setActiveTool(toolId);
-  }, []);
+  }, [setActiveTool]);
 
   const handleToggleFavorite = useCallback((e: React.MouseEvent, toolId: string) => {
     e.stopPropagation();
