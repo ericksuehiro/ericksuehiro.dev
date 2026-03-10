@@ -9,8 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@types/prismjs": "^1.26.6",
     "next": "^15.3.4",
     "pdfjs-dist": "^5.5.207",
+    "prismjs": "^1.30.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },

@@ -90,6 +90,77 @@ body {
 	}
 }
 
+/* Custom scrollbars */
+* {
+	scrollbar-width: thin;
+	scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+}
+
+*::-webkit-scrollbar {
+	width: 6px;
+	height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+	background: rgba(255, 255, 255, 0.15);
+	border-radius: 3px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+	background: rgba(255, 255, 255, 0.25);
+}
+
+*::-webkit-scrollbar-corner {
+	background: transparent;
+}
+
+@media (prefers-color-scheme: light) {
+	* {
+		scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
+	}
+
+	*::-webkit-scrollbar-thumb {
+		background: rgba(0, 0, 0, 0.15);
+	}
+
+	*::-webkit-scrollbar-thumb:hover {
+		background: rgba(0, 0, 0, 0.25);
+	}
+}
+
+/* Prism.js syntax highlighting */
+.token.tag,
+.token.tag .punctuation { color: #f472b6; }
+.token.attr-name { color: #c084fc; }
+.token.attr-value,
+.token.attr-value .punctuation { color: #34d399; }
+.token.comment { color: #6b7280; font-style: italic; }
+.token.doctype,
+.token.prolog { color: #6b7280; }
+.token.entity { color: #fbbf24; }
+.token.boolean,
+.token.number { color: #f59e0b; }
+.token.string { color: #34d399; }
+.token.keyword { color: #818cf8; }
+.token.function { color: #60a5fa; }
+.token.operator { color: #94a3b8; }
+
+@media (prefers-color-scheme: light) {
+	.token.tag,
+	.token.tag .punctuation { color: #be185d; }
+	.token.attr-name { color: #7c3aed; }
+	.token.attr-value,
+	.token.attr-value .punctuation { color: #059669; }
+	.token.comment { color: #9ca3af; font-style: italic; }
+	.token.string { color: #059669; }
+	.token.keyword { color: #4f46e5; }
+	.token.function { color: #2563eb; }
+}
+
 /* -The Game Awards Button- */
 .tga-gradient-border {
 	position: relative;

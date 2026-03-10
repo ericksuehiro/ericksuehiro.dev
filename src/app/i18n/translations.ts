@@ -78,6 +78,26 @@ const translations = {
         tryAgain: "Try again",
         newFile: "New file",
       },
+      htmlPreview: {
+        title: "HTML Preview",
+        description: "Write HTML code and see it rendered in real time. Perfect for quick prototyping and testing.",
+        placeholder: "Type your HTML here...",
+        preview: "Preview",
+        code: "Code",
+      },
+      textDiff: {
+        title: "Text Diff",
+        description: "Compare two texts and instantly see the differences highlighted. Great for code reviews and document comparison.",
+        original: "Original",
+        modified: "Modified",
+        originalPlaceholder: "Paste original text here...",
+        modifiedPlaceholder: "Paste modified text here...",
+        added: "Added",
+        removed: "Removed",
+        unchanged: "Unchanged",
+        noDifferences: "No differences found",
+        compare: "Compare",
+      },
     },
 
     // Footer
@@ -163,6 +183,26 @@ const translations = {
         tryAgain: "Tentar novamente",
         newFile: "Novo arquivo",
       },
+      htmlPreview: {
+        title: "Preview HTML",
+        description: "Escreva código HTML e veja renderizado em tempo real. Perfeito para prototipagem e testes rápidos.",
+        placeholder: "Digite seu HTML aqui...",
+        preview: "Preview",
+        code: "Código",
+      },
+      textDiff: {
+        title: "Comparar Textos",
+        description: "Compare dois textos e veja as diferenças destacadas instantaneamente. Ótimo para revisões de código e comparação de documentos.",
+        original: "Original",
+        modified: "Modificado",
+        originalPlaceholder: "Cole o texto original aqui...",
+        modifiedPlaceholder: "Cole o texto modificado aqui...",
+        added: "Adicionado",
+        removed: "Removido",
+        unchanged: "Sem alteração",
+        noDifferences: "Nenhuma diferença encontrada",
+        compare: "Comparar",
+      },
     },
 
     // Footer
@@ -205,6 +245,26 @@ export type Translations = {
       copied: string;
       tryAgain: string;
       newFile: string;
+    };
+    htmlPreview: {
+      title: string;
+      description: string;
+      placeholder: string;
+      preview: string;
+      code: string;
+    };
+    textDiff: {
+      title: string;
+      description: string;
+      original: string;
+      modified: string;
+      originalPlaceholder: string;
+      modifiedPlaceholder: string;
+      added: string;
+      removed: string;
+      unchanged: string;
+      noDifferences: string;
+      compare: string;
     };
   };
   footer: { role: string };

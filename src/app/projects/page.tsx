@@ -9,8 +9,8 @@ const projectsMeta = [
   {
     tags: ["Next.js", "TypeScript", "Tailwind CSS"],
     href: "https://careerup.me",
-    gradient: "from-emerald-400 via-teal-500 to-cyan-500",
-    accentColor: "#2dd4bf",
+    gradient: "from-purple-400 via-white to-purple-500",
+    accentColor: "#a855f7",
     logo: "/careerupLogo.svg",
     logoBg: "linear-gradient(135deg, #ffffff 0%, #f3eaff 50%, #e9d5ff 100%)",
   },
