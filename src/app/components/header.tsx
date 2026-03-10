@@ -11,6 +11,7 @@ export default function Header() {
   const { locale, setLocale, t } = useI18n();
 
   const [isNotAtTop, setIsNotAtTop] = useState(false);
+  const [isUtilsActive, setIsUtilsActive] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -23,16 +24,38 @@ export default function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Watch for data-utils-active attribute changes
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setIsUtilsActive(document.documentElement.hasAttribute("data-utils-active"));
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-utils-active"] });
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 h-14 md:h-20 flex justify-center items-end px-4">
+    <div
+      className={`fixed top-0 left-0 right-0 z-50 flex justify-center ${isUtilsActive ? "items-center" : "h-14 md:h-20 items-end"}`}
+      style={{
+        padding: isUtilsActive ? "0" : "0 1rem",
+        transition: "padding 0.5s cubic-bezier(0.16, 1, 0.3, 1)",
+      }}
+    >
       <div
-        className={`relative h-12 md:h-16 max-w-5xl w-full mx-auto md:px-5 border transition-all ease-in-out rounded-lg backdrop-blur-xl flex items-center
+        className={`relative w-full mx-auto md:px-5 border backdrop-blur-xl flex items-center h-12 md:h-16
         ${
-          isNotAtTop
-            ? "!border-[var(--header-border-color)] shadow-md bg-[var(--background)]/80 px-5"
-            : "!border-transparent px-0"
+          isUtilsActive
+            ? "!border-transparent !border-b-[var(--header-border-color)] bg-[var(--background)] px-5"
+            : isNotAtTop
+              ? "!border-[var(--header-border-color)] shadow-md bg-[var(--background)]/80 px-5"
+              : "!border-transparent px-0"
         }
         `}
+        style={{
+          maxWidth: isUtilsActive ? "100%" : "64rem",
+          borderRadius: isUtilsActive ? "0" : "0.5rem",
+          transition: "max-width 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-radius 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease, padding 0.3s ease",
+        }}
       >
         <Link href="/" className=" md:flex">
           <Image

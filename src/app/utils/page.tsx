@@ -41,6 +41,16 @@ export default function Utils() {
     setMounted(true);
   }, []);
 
+  // Signal the header to expand full-width
+  useEffect(() => {
+    if (activeTool) {
+      document.documentElement.setAttribute("data-utils-active", "true");
+    } else {
+      document.documentElement.removeAttribute("data-utils-active");
+    }
+    return () => document.documentElement.removeAttribute("data-utils-active");
+  }, [activeTool]);
+
   const tools = [
     {
       id: "pdf-to-text",
@@ -101,8 +111,8 @@ export default function Utils() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [favorites, t]);
 
-  const handleToggleTool = useCallback((toolId: string) => {
-    setActiveTool((prev) => prev === toolId ? null : toolId);
+  const handleSelectTool = useCallback((toolId: string) => {
+    setActiveTool(toolId);
   }, []);
 
   const handleToggleFavorite = useCallback((e: React.MouseEvent, toolId: string) => {
@@ -110,139 +120,222 @@ export default function Utils() {
     setFavorites(toggleFavorite(toolId));
   }, []);
 
-  return (
-    <div className="flex flex-col items-center min-h-screen w-full px-4 sm:px-6 pt-24 md:pt-32 pb-20 max-w-5xl mx-auto">
-      <div
-        className="w-full mb-16"
-        style={{
-          opacity: mounted ? 1 : 0,
-          transform: mounted ? "translateY(0)" : "translateY(20px)",
-          transition: "all 0.8s cubic-bezier(0.16, 1, 0.3, 1)",
-        }}
-      >
-        <div className="flex items-center gap-3 mb-4">
-          <div className="h-px flex-1 max-w-[40px] bg-gradient-to-r from-orange-400 to-transparent" />
-          <span className="text-xs uppercase tracking-[0.3em] opacity-40 font-medium">
-            {t.utils.label}
-          </span>
-        </div>
-        <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-none">
-          {t.utils.title}
-        </h1>
-        <p className="mt-4 text-base opacity-40 max-w-md">
-          {t.utils.description}
-        </p>
-      </div>
+  const activeToolData = activeTool ? tools.find((t) => t.id === activeTool) : null;
 
-      <div className="w-full flex flex-col gap-4">
-        {sortedTools.map((tool, index) => {
-          const isActive = activeTool === tool.id;
-          return (
-            <div
+  // Card grid view — no tool selected
+  if (!activeTool) {
+    return (
+      <div className="flex flex-col items-center min-h-screen w-full px-4 sm:px-6 pt-24 md:pt-32 pb-20 max-w-5xl mx-auto">
+        <div
+          className="w-full mb-16"
+          style={{
+            opacity: mounted ? 1 : 0,
+            transform: mounted ? "translateY(0)" : "translateY(20px)",
+            transition: "all 0.8s cubic-bezier(0.16, 1, 0.3, 1)",
+          }}
+        >
+          <div className="flex items-center gap-3 mb-4">
+            <div className="h-px flex-1 max-w-[40px] bg-gradient-to-r from-orange-400 to-transparent" />
+            <span className="text-xs uppercase tracking-[0.3em] opacity-40 font-medium">
+              {t.utils.label}
+            </span>
+          </div>
+          <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-none">
+            {t.utils.title}
+          </h1>
+          <p className="mt-4 text-base opacity-40 max-w-md">
+            {t.utils.description}
+          </p>
+        </div>
+
+        <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {sortedTools.map((tool, index) => (
+            <button
               key={tool.id}
+              type="button"
+              onClick={() => handleSelectTool(tool.id)}
+              className="group relative block w-full text-left"
               style={{
                 opacity: mounted ? 1 : 0,
                 transform: mounted ? "translateY(0)" : "translateY(30px)",
                 transition: `all 0.8s cubic-bezier(0.16, 1, 0.3, 1) ${0.15 + index * 0.1}s`,
               }}
             >
-              <button
-                type="button"
-                onClick={() => handleToggleTool(tool.id)}
-                className="group relative block w-full text-left"
-              >
-                {/* Border gradient — only visible when active */}
-                <div
-                  className={`absolute -inset-px bg-gradient-to-r ${tool.gradient} rounded-2xl transition-opacity duration-300`}
-                  style={{ opacity: isActive ? 0.5 : 0 }}
-                />
-                <div
-                  className={`relative rounded-2xl bg-[var(--background)] p-6 md:p-8 transition-all duration-300 overflow-hidden ${
-                    isActive ? "rounded-b-none" : ""
-                  }`}
-                >
-                  {/* Top accent line */}
-                  <div
-                    className={`absolute top-0 left-0 h-px bg-gradient-to-r ${tool.gradient} transition-all duration-500 ease-out`}
-                    style={{ width: isActive ? "100%" : "0%" }}
-                  />
-                  <div className="relative flex items-center gap-5">
-                    <div
-                      className={`shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br ${tool.gradient} text-white flex items-center justify-center shadow-lg transition-all duration-300`}
-                      style={{
-                        transform: isActive ? "scale(1.1) rotate(-3deg)" : "scale(1)",
-                        boxShadow: isActive ? `0 8px 24px ${tool.accentColor}40` : "0 4px 12px rgba(0,0,0,0.1)",
-                      }}
-                    >
-                      {tool.icon}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <h2 className="text-xl md:text-2xl font-bold tracking-tight">{tool.title}</h2>
-                      <p className="text-sm opacity-45 mt-1">{tool.description}</p>
-                    </div>
-                    <div
-                      role="button"
-                      tabIndex={0}
-                      onClick={(e) => handleToggleFavorite(e, tool.id)}
-                      onKeyDown={(e) => { if (e.key === "Enter") handleToggleFavorite(e as unknown as React.MouseEvent, tool.id); }}
-                      className="shrink-0 w-8 h-8 rounded-lg border !border-[var(--header-border-color)] flex items-center justify-center transition-all duration-300 hover:!border-yellow-400/40 hover:bg-yellow-400/5 cursor-pointer"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className={`w-3.5 h-3.5 transition-all duration-300 ${favorites.includes(tool.id) ? "fill-yellow-400 text-yellow-400" : "fill-none opacity-30"}`}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.562.562 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.562.562 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
-                      </svg>
-                    </div>
-                    <div
-                      className="shrink-0 w-8 h-8 rounded-lg border !border-[var(--header-border-color)] flex items-center justify-center transition-all duration-300"
-                      style={{ transform: isActive ? "rotate(180deg)" : "rotate(0deg)" }}
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 opacity-40">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                      </svg>
-                    </div>
-                  </div>
-                </div>
-              </button>
-
-              {/* Expandable content */}
               <div
-                className="grid transition-all duration-500 ease-out"
-                style={{
-                  gridTemplateRows: isActive ? "1fr" : "0fr",
-                }}
-              >
-                <div className="overflow-hidden">
+                className={`absolute -inset-px bg-gradient-to-r ${tool.gradient} rounded-2xl transition-opacity duration-300 opacity-0 group-hover:opacity-50`}
+              />
+              <div className="relative rounded-2xl bg-[var(--background)] p-6 transition-all duration-300 overflow-hidden h-full">
+                <div
+                  className={`absolute top-0 left-0 w-0 group-hover:w-full h-px bg-gradient-to-r ${tool.gradient} transition-all duration-500 ease-out`}
+                />
+                {/* Favorite button */}
+                <div
+                  role="button"
+                  tabIndex={0}
+                  onClick={(e) => handleToggleFavorite(e, tool.id)}
+                  onKeyDown={(e) => { if (e.key === "Enter") handleToggleFavorite(e as unknown as React.MouseEvent, tool.id); }}
+                  className="absolute top-4 right-4 z-10 w-7 h-7 rounded-lg border !border-[var(--header-border-color)] flex items-center justify-center transition-all duration-300 hover:!border-yellow-400/40 hover:bg-yellow-400/5 cursor-pointer opacity-0 group-hover:opacity-100"
+                  style={{ opacity: favorites.includes(tool.id) ? 1 : undefined }}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className={`w-3 h-3 transition-all duration-300 ${favorites.includes(tool.id) ? "fill-yellow-400 text-yellow-400" : "fill-none opacity-40"}`}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.562.562 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.562.562 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+                  </svg>
+                </div>
+                <div className="relative flex flex-col gap-4">
                   <div
-                    className="border !border-[var(--header-border-color)] border-t-0 rounded-b-2xl bg-[var(--background)]"
-                    style={{
-                      opacity: isActive ? 1 : 0,
-                      transition: "opacity 0.3s ease 0.1s",
-                    }}
+                    className={`shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br ${tool.gradient} text-white flex items-center justify-center shadow-lg transition-all duration-300 group-hover:scale-110 group-hover:-rotate-3`}
                   >
-                    {tool.id === "pdf-to-text" && <PdfToText />}
-                    {tool.id === "html-preview" && <HtmlPreview />}
-                    {tool.id === "text-diff" && <TextDiff />}
-                    {tool.id === "api-tester" && <ApiTester />}
+                    {tool.icon}
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2 mb-1.5">
+                      <h2 className="text-lg font-bold tracking-tight">{tool.title}</h2>
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3.5 h-3.5 opacity-0 transition-all duration-300 group-hover:opacity-40 group-hover:translate-x-0.5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                      </svg>
+                    </div>
+                    <p className="text-xs opacity-40 leading-relaxed">{tool.description}</p>
                   </div>
                 </div>
               </div>
-            </div>
-          );
-        })}
+            </button>
+          ))}
+        </div>
+
+        <div
+          className="mt-20 flex items-center gap-4"
+          style={{
+            opacity: mounted ? 0.2 : 0,
+            transition: "opacity 1s ease 0.6s",
+          }}
+        >
+          <div className="h-px w-12 bg-gradient-to-r from-transparent to-current" />
+          <span className="text-[10px] uppercase tracking-[0.4em]">
+            {t.utils.moreComingSoon}
+          </span>
+          <div className="h-px w-12 bg-gradient-to-l from-transparent to-current" />
+        </div>
+      </div>
+    );
+  }
+
+  // Sidebar + content view — tool selected
+  return (
+    <div className="flex fixed inset-0 w-full pt-12 md:pt-16 bg-[var(--background)] z-40">
+      {/* Sidebar */}
+      <aside className="hidden md:flex flex-col w-56 shrink-0 border-r !border-[var(--header-border-color)] pt-6 pb-8 px-3 overflow-y-auto">
+        <button
+          type="button"
+          onClick={() => setActiveTool(null)}
+          className="flex items-center gap-2 px-3 py-2 mb-4 text-xs opacity-40 hover:opacity-70 transition-opacity"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3.5 h-3.5">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+          </svg>
+          {t.utils.title}
+        </button>
+
+        <nav className="flex flex-col gap-1">
+          {tools.map((tool) => {
+            const isActive = activeTool === tool.id;
+            return (
+              <button
+                key={tool.id}
+                type="button"
+                onClick={() => handleSelectTool(tool.id)}
+                className={`group relative flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all duration-200 ${
+                  isActive ? "bg-white/5" : "hover:bg-white/[0.03]"
+                }`}
+              >
+                {/* Active indicator */}
+                <div
+                  className={`absolute left-0 top-1/2 -translate-y-1/2 w-[3px] rounded-full bg-gradient-to-b ${tool.gradient} transition-all duration-300`}
+                  style={{ height: isActive ? "60%" : "0%", opacity: isActive ? 1 : 0 }}
+                />
+                <div
+                  className={`shrink-0 w-7 h-7 rounded-lg bg-gradient-to-br ${tool.gradient} text-white flex items-center justify-center transition-all duration-200 [&>svg]:w-3.5 [&>svg]:h-3.5`}
+                  style={{ opacity: isActive ? 1 : 0.5 }}
+                >
+                  {tool.icon}
+                </div>
+                <span className={`text-sm font-medium transition-opacity duration-200 truncate ${isActive ? "opacity-90" : "opacity-45 group-hover:opacity-65"}`}>
+                  {tool.title}
+                </span>
+              </button>
+            );
+          })}
+        </nav>
+
+        <div className="mt-auto pt-4 px-3">
+          <div className="h-px w-full bg-[var(--header-border-color)] mb-3" />
+          <span className="text-[9px] uppercase tracking-[0.3em] opacity-20">
+            {t.utils.moreComingSoon}
+          </span>
+        </div>
+      </aside>
+
+      {/* Mobile top bar */}
+      <div className="md:hidden absolute top-14 left-0 right-0 z-30 border-b !border-[var(--header-border-color)] bg-[var(--background)]/80 backdrop-blur-xl">
+        <div className="flex items-center gap-1 px-3 py-2 overflow-x-auto scrollbar-hide">
+          <button
+            type="button"
+            onClick={() => setActiveTool(null)}
+            className="shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs opacity-40 hover:opacity-70 transition-opacity"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3.5 h-3.5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+            </svg>
+          </button>
+          <div className="w-px h-5 bg-[var(--header-border-color)] shrink-0" />
+          {tools.map((tool) => {
+            const isActive = activeTool === tool.id;
+            return (
+              <button
+                key={tool.id}
+                type="button"
+                onClick={() => handleSelectTool(tool.id)}
+                className={`shrink-0 flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 ${
+                  isActive ? "bg-white/10 opacity-90" : "opacity-40 hover:opacity-60"
+                }`}
+              >
+                <div className={`w-4 h-4 rounded bg-gradient-to-br ${tool.gradient} [&>svg]:w-2.5 [&>svg]:h-2.5 text-white flex items-center justify-center`}>
+                  {tool.icon}
+                </div>
+                {tool.title}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
-      <div
-        className="mt-20 flex items-center gap-4"
-        style={{
-          opacity: mounted ? 0.2 : 0,
-          transition: "opacity 1s ease 0.6s",
-        }}
-      >
-        <div className="h-px w-12 bg-gradient-to-r from-transparent to-current" />
-        <span className="text-[10px] uppercase tracking-[0.4em]">
-          {t.utils.moreComingSoon}
-        </span>
-        <div className="h-px w-12 bg-gradient-to-l from-transparent to-current" />
-      </div>
+      {/* Main content */}
+      <main className="flex-1 min-w-0 px-4 sm:px-6 md:px-8 pt-16 md:pt-6 pb-12 overflow-y-auto">
+        {activeToolData && (
+          <div
+            key={activeTool}
+            style={{ animation: "util-fade-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) both" }}
+          >
+            {/* Tool header */}
+            <div className="flex items-center gap-4 mb-6">
+              <div
+                className={`shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br ${activeToolData.gradient} text-white flex items-center justify-center shadow-lg [&>svg]:w-5 [&>svg]:h-5`}
+              >
+                {activeToolData.icon}
+              </div>
+              <div>
+                <h1 className="text-2xl md:text-3xl font-bold tracking-tight">{activeToolData.title}</h1>
+                <p className="text-xs opacity-40 mt-0.5">{activeToolData.description}</p>
+              </div>
+            </div>
+
+            {/* Tool content */}
+            {activeTool === "pdf-to-text" && <PdfToText />}
+            {activeTool === "html-preview" && <HtmlPreview />}
+            {activeTool === "text-diff" && <TextDiff />}
+            {activeTool === "api-tester" && <ApiTester />}
+          </div>
+        )}
+      </main>
     </div>
   );
 }
