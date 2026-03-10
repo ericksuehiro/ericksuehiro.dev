@@ -53,6 +53,17 @@ body {
 	animation: gradient-wave 5s ease infinite;
 }
 
+@keyframes fadeSlideUp {
+	0% {
+		opacity: 0;
+		transform: translateY(8px);
+	}
+	100% {
+		opacity: 0.5;
+		transform: translateY(0);
+	}
+}
+
 .mask-gradient {
 	-webkit-mask-image: linear-gradient(
 		to bottom,

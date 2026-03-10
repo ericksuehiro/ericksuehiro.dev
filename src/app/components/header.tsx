@@ -7,8 +7,6 @@ import Image from "next/image";
 
 export default function Header() {
   const path = usePathname();
-  console.log(path);
-  
 
   const [isNotAtTop, setIsNotAtTop] = useState(false);
 
@@ -52,7 +50,7 @@ export default function Header() {
           {[
             // { name: "Home", href: "/" },
             { name: "Projects", href: "/projects" },
-            { name: "Contact", href: "/contact" },
+            { name: "Utils", href: "/utils" },
           ].map((item) => (
             <Link
               key={item.href}

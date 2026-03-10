@@ -1,65 +1,145 @@
+"use client";
+
 import Image from "next/image";
+import { useState, useEffect } from "react";
+
+const experiences = [
+  {
+    company: "Santander",
+    logo: "/santanderLogo.svg",
+    period: "2022 — Present",
+    role: "Developer",
+    description:
+      "Joined as a backend developer specializing in Java microservices with Spring. Transitioned to front-end development, delivering solutions with Angular as the primary framework.",
+    gradient: "from-red-400 to-red-600",
+    accentColor: "#f87171",
+  },
+  {
+    company: "Accenture",
+    logo: "/accentureLogo.svg",
+    period: "2021 — 2022",
+    role: "Analyst",
+    description:
+      "Backend developer focused on Java microservices using Camel and Spring. Led the migration from IIB to Camel, ensuring seamless transition and improved performance.",
+    gradient: "from-purple-400 to-purple-600",
+    accentColor: "#c084fc",
+  },
+];
 
 export default function Journey() {
-  const cards = [
-    {
-      name: "Santander",
-      logoHref: "../santanderLogo.svg",
-      time: "2022 - Today",
-      position: "Developer",
-      description: "I joined Santander in 2022 as a backend developer, specializing in building microservices with Java and leveraging technologies like Spring. \n Over time, I transitioned to the role of front-end developer within the team, focusing on delivering solutions using Angular as the primary framework.",
-      color: "from-red-300 to-red-600 top-[calc(10rem)]",
-    },
-    {
-      name: "Accenture",
-      logoHref: "../accentureLogo.svg",
-      time: "2021 - 2022",
-      position: "Analist",
-      description: "I began my journey at Accenture in 2021 as a backend developer, focusing on creating microservices with Java and utilizing technologies such as Camel and Spring. \n A key challenge during this time was leading the migration from IIB to Camel, ensuring a seamless transition and improved performance.",
-      color: "from-purple-300 to-purple-600 top-[calc(10rem+10px)]",
-    },
-  ];
+  const [mounted, setMounted] = useState(false);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   return (
-    <div
-      className={`w-full h-[${
-        cards.length * 60
-      }vh] border-t !border-t-[var(--header-border-color)] bg-gradient-to-b from-[#ffffff03] animate-gradient-wave flex justify-center items-center overflow-clip flex-col`}
-    >
-      <h1 className="h-20 flex items-center sticky top-14 font-bold text-xl">My Journey</h1>
-      <div className="flex flex-col md:flex-row w-full max-w-7xl md:justify-center md:gap-5">
-        {cards.map((item) => (
-          <div
-            key={item.name}
-            className={`flex items-center justify-center mb-10 sticky ${item.color}`}
-          >
+    <div className="w-full border-t !border-t-[var(--header-border-color)]">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-20 md:py-28">
+        {/* Section Header */}
+        <div
+          className="mb-14"
+          style={{
+            opacity: mounted ? 1 : 0,
+            transform: mounted ? "translateY(0)" : "translateY(20px)",
+            transition: "all 0.8s cubic-bezier(0.16, 1, 0.3, 1)",
+          }}
+        >
+          <div className="flex items-center gap-3 mb-4">
+            <div className="h-px flex-1 max-w-[40px] bg-gradient-to-r from-purple-400 to-transparent" />
+            <span className="text-xs uppercase tracking-[0.3em] opacity-40 font-medium">
+              Experience
+            </span>
+          </div>
+          <h2 className="text-4xl md:text-5xl font-bold tracking-tight leading-none">
+            My Journey
+          </h2>
+        </div>
+
+        {/* Timeline */}
+        <div className="relative flex flex-col gap-6">
+          {/* Vertical line */}
+          <div className="absolute left-[27px] top-4 bottom-4 w-px bg-gradient-to-b from-[var(--header-border-color)] via-[var(--header-border-color)] to-transparent hidden md:block" />
+
+          {experiences.map((exp, index) => (
             <div
-              className={`h-[30rem] w-[20rem] rounded-2xl animate-gradient-wave bg-gradient-to-tr ${item.color} bg-[length:200%_200%] p-5 shadow-md viewCardAnimation sm:animate-none`}
+              key={exp.company}
+              className="group relative"
+              onMouseEnter={() => setHoveredIndex(index)}
+              onMouseLeave={() => setHoveredIndex(null)}
+              style={{
+                opacity: mounted ? 1 : 0,
+                transform: mounted ? "translateY(0)" : "translateY(30px)",
+                transition: `all 0.8s cubic-bezier(0.16, 1, 0.3, 1) ${0.15 + index * 0.1}s`,
+              }}
             >
-              <div className="h-20 w-full bg-gray-300  bg-opacity-30 backdrop-blur-lg rounded-3xl shadow-md flex justify-center items-center">
-                <Image
-                  src={item.logoHref}
-                  alt={`${item.name} Logo`}
-                  width={200}
-                  height={50}
-                  className={"transition-all ease-in-out mb-2"}
+              {/* Glow */}
+              <div
+                className={`absolute -inset-1 bg-gradient-to-r ${exp.gradient} rounded-2xl transition-all duration-500 blur-xl`}
+                style={{ opacity: hoveredIndex === index ? 0.1 : 0 }}
+              />
+
+              {/* Border gradient */}
+              <div
+                className={`absolute -inset-px bg-gradient-to-r ${exp.gradient} rounded-2xl transition-all duration-500`}
+                style={{ opacity: hoveredIndex === index ? 0.5 : 0 }}
+              />
+
+              {/* Card */}
+              <div className="relative rounded-2xl bg-[var(--background)] p-6 md:p-8 transition-all duration-500 overflow-hidden">
+                {/* Top accent line */}
+                <div
+                  className={`absolute top-0 left-0 h-px bg-gradient-to-r ${exp.gradient} transition-all duration-700 ease-out`}
+                  style={{ width: hoveredIndex === index ? "100%" : "0%" }}
                 />
-              </div>
-              <div className="h-[calc(100%-5rem)] w-full pt-5 text-2xl flex flex-col text-white">
-                {/* <p className="w-full flex justify-center">{item.position}</p> */}
-                <div className="text-base text-center opacity-85 pt-2">
-                  {item.description.split("\n").map((line) => (
-                    <p key={line}>{line}</p>
-                  ))}
+
+                <div className="relative flex flex-col md:flex-row md:items-center gap-6">
+                  {/* Timeline dot + Logo */}
+                  <div className="flex items-center gap-5 shrink-0">
+                    {/* Dot */}
+                    <div
+                      className={`hidden md:flex w-[14px] h-[14px] rounded-full border-2 transition-all duration-300 shrink-0`}
+                      style={{
+                        borderColor: hoveredIndex === index ? exp.accentColor : "var(--header-border-color)",
+                        backgroundColor: hoveredIndex === index ? exp.accentColor : "transparent",
+                        boxShadow: hoveredIndex === index ? `0 0 12px ${exp.accentColor}44` : "none",
+                      }}
+                    />
+
+                    {/* Logo */}
+                    <div className="w-[140px] h-14 rounded-xl bg-[var(--foreground)]/5 flex items-center justify-center px-4 shrink-0 border !border-[var(--header-border-color)] transition-all duration-300"
+                      style={{
+                        borderColor: hoveredIndex === index ? `${exp.accentColor}33` : undefined,
+                      }}
+                    >
+                      <Image
+                        src={exp.logo}
+                        alt={`${exp.company} Logo`}
+                        width={120}
+                        height={30}
+                        className="filter invert-[var(--filterInvert)] opacity-60 transition-all duration-300 group-hover:opacity-90"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Content */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-3 mb-1 flex-wrap">
+                      <h3 className="text-xl font-bold tracking-tight">{exp.role}</h3>
+                      <span className="text-xs px-2.5 py-0.5 rounded-full opacity-40 border !border-[var(--header-border-color)]">
+                        {exp.period}
+                      </span>
+                    </div>
+                    <p className="text-sm opacity-45 leading-relaxed max-w-xl">
+                      {exp.description}
+                    </p>
+                  </div>
                 </div>
-                <footer className="text-base text-center mt-auto">
-                  <hr className="mb-1 !border-white" />
-                  {item.time}
-                </footer>
               </div>
             </div>
-          </div>
-        ))}
-        <div className="h-52 md:hidden" />
+          ))}
+        </div>
       </div>
     </div>
   );
