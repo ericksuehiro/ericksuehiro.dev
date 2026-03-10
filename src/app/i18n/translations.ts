@@ -98,6 +98,27 @@ const translations = {
         noDifferences: "No differences found",
         compare: "Compare",
       },
+      apiTester: {
+        title: "API Tester",
+        description: "Test HTTP requests directly from your browser. Like Postman, but lightweight and instant.",
+        url: "URL",
+        urlPlaceholder: "https://api.example.com/endpoint",
+        send: "Send",
+        sending: "Sending...",
+        headers: "Headers",
+        body: "Body",
+        response: "Response",
+        status: "Status",
+        time: "Time",
+        size: "Size",
+        headerKey: "Key",
+        headerValue: "Value",
+        addHeader: "Add header",
+        copyAsCurl: "Copy as cURL",
+        copied: "Copied!",
+        noResponse: "Send a request to see the response",
+        error: "Request failed",
+      },
     },
 
     // Footer
@@ -203,6 +224,27 @@ const translations = {
         noDifferences: "Nenhuma diferença encontrada",
         compare: "Comparar",
       },
+      apiTester: {
+        title: "API Tester",
+        description: "Teste requisições HTTP direto do seu navegador. Como um Postman, mas leve e instantâneo.",
+        url: "URL",
+        urlPlaceholder: "https://api.example.com/endpoint",
+        send: "Enviar",
+        sending: "Enviando...",
+        headers: "Headers",
+        body: "Body",
+        response: "Resposta",
+        status: "Status",
+        time: "Tempo",
+        size: "Tamanho",
+        headerKey: "Chave",
+        headerValue: "Valor",
+        addHeader: "Adicionar header",
+        copyAsCurl: "Copiar como cURL",
+        copied: "Copiado!",
+        noResponse: "Envie uma requisição para ver a resposta",
+        error: "Requisição falhou",
+      },
     },
 
     // Footer
@@ -265,6 +307,27 @@ export type Translations = {
       unchanged: string;
       noDifferences: string;
       compare: string;
+    };
+    apiTester: {
+      title: string;
+      description: string;
+      url: string;
+      urlPlaceholder: string;
+      send: string;
+      sending: string;
+      headers: string;
+      body: string;
+      response: string;
+      status: string;
+      time: string;
+      size: string;
+      headerKey: string;
+      headerValue: string;
+      addHeader: string;
+      copyAsCurl: string;
+      copied: string;
+      noResponse: string;
+      error: string;
     };
   };
   footer: { role: string };

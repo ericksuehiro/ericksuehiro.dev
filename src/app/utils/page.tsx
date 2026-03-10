@@ -77,6 +77,18 @@ export default function Utils() {
       gradient: "from-emerald-400 via-teal-400 to-cyan-500",
       accentColor: "#2dd4bf",
     },
+    {
+      id: "api-tester",
+      title: t.utils.apiTester.title,
+      description: t.utils.apiTester.description,
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+        </svg>
+      ),
+      gradient: "from-amber-400 via-orange-400 to-red-500",
+      accentColor: "#f59e0b",
+    },
   ];
 
   const sortedTools = useMemo(() => {
@@ -208,6 +220,7 @@ export default function Utils() {
                     {tool.id === "pdf-to-text" && <PdfToText />}
                     {tool.id === "html-preview" && <HtmlPreview />}
                     {tool.id === "text-diff" && <TextDiff />}
+                    {tool.id === "api-tester" && <ApiTester />}
                   </div>
                 </div>
               </div>
@@ -893,6 +906,409 @@ function HtmlPreview() {
           </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+/* ─── API Tester ─── */
+
+type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE" | "HEAD" | "OPTIONS";
+
+interface HeaderEntry {
+  key: string;
+  value: string;
+}
+
+interface ApiResponse {
+  status: number;
+  statusText: string;
+  headers: Record<string, string>;
+  body: string;
+  time: number;
+  size: number;
+}
+
+const METHOD_COLORS: Record<HttpMethod, string> = {
+  GET: "text-emerald-400",
+  POST: "text-blue-400",
+  PUT: "text-amber-400",
+  PATCH: "text-orange-400",
+  DELETE: "text-red-400",
+  HEAD: "text-purple-400",
+  OPTIONS: "text-gray-400",
+};
+
+const API_TESTER_KEY = "api-tester-state";
+
+interface ApiTesterState {
+  method: HttpMethod;
+  url: string;
+  headers: HeaderEntry[];
+  body: string;
+}
+
+const API_TESTER_DEFAULTS: ApiTesterState = {
+  method: "GET",
+  url: "https://api.github.com/users/ericksuehiro",
+  headers: [{ key: "Content-Type", value: "application/json" }],
+  body: "",
+};
+
+function getApiTesterState(): ApiTesterState {
+  try {
+    const stored = localStorage.getItem(API_TESTER_KEY);
+    if (stored) return JSON.parse(stored);
+  } catch { /* ignore */ }
+  return API_TESTER_DEFAULTS;
+}
+
+function ApiTester() {
+  const initial = useRef(getApiTesterState()).current;
+  const [method, setMethod] = useState<HttpMethod>(initial.method);
+  const [methodOpen, setMethodOpen] = useState(false);
+  const [methodClosing, setMethodClosing] = useState(false);
+  const methodRef = useRef<HTMLDivElement>(null);
+  const [url, setUrl] = useState(initial.url);
+  const [headers, setHeaders] = useState<HeaderEntry[]>(initial.headers);
+  const [body, setBody] = useState(initial.body);
+  const [activeTab, setActiveTab] = useState<"headers" | "body">("headers");
+  const [response, setResponse] = useState<ApiResponse | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
+  const { t } = useI18n();
+  const strings = t.utils.apiTester;
+
+  // Persist state to localStorage
+  useEffect(() => {
+    const state: ApiTesterState = { method, url, headers, body };
+    localStorage.setItem(API_TESTER_KEY, JSON.stringify(state));
+  }, [method, url, headers, body]);
+
+  const buildCurl = useCallback(() => {
+    let cmd = `curl -X ${method}`;
+    headers.forEach((h) => {
+      if (h.key.trim() && h.value.trim()) {
+        cmd += ` \\\n  -H '${h.key}: ${h.value}'`;
+      }
+    });
+    if (body && method !== "GET" && method !== "HEAD") {
+      cmd += ` \\\n  -d '${body.replace(/'/g, "'\\''")}'`;
+    }
+    cmd += ` \\\n  '${url}'`;
+    return cmd;
+  }, [method, url, headers, body]);
+
+  const handleCopyCurl = useCallback(async () => {
+    await navigator.clipboard.writeText(buildCurl());
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  }, [buildCurl]);
+
+  const handleSend = useCallback(async () => {
+    if (!url.trim()) return;
+    setLoading(true);
+    setError(null);
+    setResponse(null);
+
+    const headersObj: Record<string, string> = {};
+    headers.forEach((h) => {
+      if (h.key.trim() && h.value.trim()) headersObj[h.key.trim()] = h.value.trim();
+    });
+
+    const start = performance.now();
+
+    try {
+      const opts: RequestInit = {
+        method,
+        headers: headersObj,
+      };
+      if (body && method !== "GET" && method !== "HEAD") {
+        opts.body = body;
+      }
+
+      const res = await fetch(url, opts);
+      const elapsed = Math.round(performance.now() - start);
+      const text = await res.text();
+
+      const respHeaders: Record<string, string> = {};
+      res.headers.forEach((v, k) => { respHeaders[k] = v; });
+
+      setResponse({
+        status: res.status,
+        statusText: res.statusText,
+        headers: respHeaders,
+        body: text,
+        time: elapsed,
+        size: new Blob([text]).size,
+      });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : strings.error);
+    } finally {
+      setLoading(false);
+    }
+  }, [url, method, headers, body, strings.error]);
+
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
+      handleSend();
+    }
+  }, [handleSend]);
+
+  const closeMethodDropdown = useCallback(() => {
+    setMethodClosing(true);
+    setTimeout(() => {
+      setMethodOpen(false);
+      setMethodClosing(false);
+    }, 120);
+  }, []);
+
+  // Close method dropdown on outside click
+  useEffect(() => {
+    if (!methodOpen || methodClosing) return;
+    const handler = (e: MouseEvent) => {
+      if (methodRef.current && !methodRef.current.contains(e.target as Node)) {
+        closeMethodDropdown();
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [methodOpen, methodClosing, closeMethodDropdown]);
+
+  const addHeader = useCallback(() => {
+    setHeaders((prev) => [...prev, { key: "", value: "" }]);
+  }, []);
+
+  const updateHeader = useCallback((index: number, field: "key" | "value", val: string) => {
+    setHeaders((prev) => prev.map((h, i) => i === index ? { ...h, [field]: val } : h));
+  }, []);
+
+  const removeHeader = useCallback((index: number) => {
+    setHeaders((prev) => prev.filter((_, i) => i !== index));
+  }, []);
+
+  const formatSize = (bytes: number) => {
+    if (bytes < 1024) return `${bytes} B`;
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+    return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
+  };
+
+  const statusColor = response
+    ? response.status < 300 ? "text-emerald-400" : response.status < 400 ? "text-amber-400" : "text-red-400"
+    : "";
+
+  // Try to pretty-print JSON
+  const formattedBody = useMemo(() => {
+    if (!response?.body) return "";
+    try {
+      return JSON.stringify(JSON.parse(response.body), null, 2);
+    } catch {
+      return response.body;
+    }
+  }, [response?.body]);
+
+  return (
+    <div className="p-6 md:p-8 space-y-4" onKeyDown={handleKeyDown}>
+      {/* Method + URL + Send */}
+      <div className="flex gap-2">
+        <div ref={methodRef} className="relative shrink-0">
+          <button
+            type="button"
+            onClick={() => methodOpen ? closeMethodDropdown() : setMethodOpen(true)}
+            className={`w-28 h-full px-3 py-2.5 rounded-lg border !border-[var(--header-border-color)] bg-transparent text-sm font-bold focus:outline-none focus:!border-amber-400/40 transition-all duration-200 cursor-pointer flex items-center justify-between gap-2 ${METHOD_COLORS[method]} ${methodOpen ? "!border-amber-400/40" : ""}`}
+          >
+            {method}
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className={`w-3.5 h-3.5 opacity-40 transition-transform duration-200 ${methodOpen ? "rotate-180" : ""}`}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+            </svg>
+          </button>
+          {methodOpen && (
+            <div
+              className="absolute top-full left-0 mt-1 w-28 z-30 rounded-lg border !border-[var(--header-border-color)] bg-[var(--background)] shadow-xl shadow-black/30 overflow-hidden"
+              style={{ animation: `${methodClosing ? "combobox-out" : "combobox-in"} ${methodClosing ? "0.12s" : "0.15s"} ease-${methodClosing ? "in" : "out"} forwards` }}
+            >
+              {(["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"] as HttpMethod[]).map((m) => (
+                <button
+                  key={m}
+                  type="button"
+                  onClick={() => { setMethod(m); closeMethodDropdown(); }}
+                  className={`w-full text-left px-3 py-2 text-sm font-bold transition-colors duration-75 flex items-center gap-2 ${METHOD_COLORS[m]} ${
+                    m === method ? "bg-amber-400/10" : "hover:bg-[var(--header-border-color)]"
+                  }`}
+                >
+                  {m === method && (
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3 h-3">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                    </svg>
+                  )}
+                  {m !== method && <span className="w-3" />}
+                  {m}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+        <input
+          type="text"
+          value={url}
+          onChange={(e) => setUrl(e.target.value)}
+          onKeyDown={(e) => { if (e.key === "Enter") handleSend(); }}
+          placeholder={strings.urlPlaceholder}
+          className="flex-1 min-w-0 px-4 py-2.5 rounded-lg border !border-[var(--header-border-color)] bg-transparent text-sm font-mono focus:outline-none focus:!border-amber-400/40 transition-all duration-200"
+        />
+        <button
+          type="button"
+          onClick={handleSend}
+          disabled={loading || !url.trim()}
+          className="shrink-0 px-6 py-2.5 rounded-lg bg-gradient-to-r from-amber-400 to-orange-500 text-white text-sm font-bold transition-all duration-200 hover:shadow-lg hover:shadow-amber-500/20 disabled:opacity-40 disabled:cursor-not-allowed"
+        >
+          {loading ? strings.sending : strings.send}
+        </button>
+      </div>
+
+      {/* Tabs + Copy cURL */}
+      <div className="flex items-center gap-4">
+        <div className="flex gap-1">
+          {(["headers", "body"] as const).map((tab) => (
+            <button
+              key={tab}
+              type="button"
+              onClick={() => setActiveTab(tab)}
+              className={`px-4 py-1.5 text-xs uppercase tracking-wider font-medium rounded-lg transition-all duration-200 ${
+                activeTab === tab
+                  ? "bg-amber-400/10 text-amber-400"
+                  : "opacity-40 hover:opacity-70"
+              }`}
+            >
+              {tab === "headers" ? strings.headers : strings.body}
+            </button>
+          ))}
+        </div>
+        <button
+          type="button"
+          onClick={handleCopyCurl}
+          disabled={!url.trim()}
+          className="ml-auto flex items-center gap-1.5 text-[11px] px-3 py-1.5 rounded-lg border !border-[var(--header-border-color)] opacity-50 hover:opacity-100 transition-all duration-200 disabled:opacity-20 disabled:cursor-not-allowed"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3 h-3">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 7.5l3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0021 18V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v12a2.25 2.25 0 002.25 2.25z" />
+          </svg>
+          {copied ? strings.copied : strings.copyAsCurl}
+        </button>
+      </div>
+
+      {/* Headers tab */}
+      {activeTab === "headers" && (
+        <div className="space-y-2">
+          {headers.map((h, i) => (
+            <div key={i} className="flex gap-2 items-center">
+              <input
+                type="text"
+                value={h.key}
+                onChange={(e) => updateHeader(i, "key", e.target.value)}
+                placeholder={strings.headerKey}
+                className="flex-1 min-w-0 px-3 py-2 rounded-lg border !border-[var(--header-border-color)] bg-transparent text-xs font-mono focus:outline-none focus:!border-amber-400/40 transition-all duration-200"
+              />
+              <input
+                type="text"
+                value={h.value}
+                onChange={(e) => updateHeader(i, "value", e.target.value)}
+                placeholder={strings.headerValue}
+                className="flex-1 min-w-0 px-3 py-2 rounded-lg border !border-[var(--header-border-color)] bg-transparent text-xs font-mono focus:outline-none focus:!border-amber-400/40 transition-all duration-200"
+              />
+              <button
+                type="button"
+                onClick={() => removeHeader(i)}
+                className="shrink-0 w-8 h-8 rounded-lg border !border-[var(--header-border-color)] flex items-center justify-center opacity-30 hover:opacity-100 hover:!border-red-400/40 hover:text-red-400 transition-all duration-200"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3.5 h-3.5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={addHeader}
+            className="flex items-center gap-1.5 text-xs opacity-40 hover:opacity-100 transition-opacity duration-200"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3.5 h-3.5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+            {strings.addHeader}
+          </button>
+        </div>
+      )}
+
+      {/* Body tab */}
+      {activeTab === "body" && (
+        <textarea
+          value={body}
+          onChange={(e) => setBody(e.target.value)}
+          placeholder='{\n  "key": "value"\n}'
+          className="w-full h-[180px] p-4 rounded-xl border !border-[var(--header-border-color)] bg-transparent text-sm font-mono leading-relaxed opacity-70 focus:opacity-100 focus:outline-none focus:!border-amber-400/40 transition-all duration-300 resize-none"
+          spellCheck={false}
+        />
+      )}
+
+      {/* Error */}
+      {error && (
+        <div className="rounded-xl border !border-red-500/20 bg-red-500/5 p-4 flex items-center gap-3">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-red-400 shrink-0">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+          </svg>
+          <p className="text-sm text-red-400">{error}</p>
+        </div>
+      )}
+
+      {/* Response */}
+      {response && (
+        <div className="space-y-3">
+          {/* Status bar */}
+          <div className="flex items-center gap-4 flex-wrap">
+            <span className={`text-sm font-bold font-mono ${statusColor}`}>
+              {response.status} {response.statusText}
+            </span>
+            <span className="text-xs opacity-40 font-mono">{strings.time}: {response.time}ms</span>
+            <span className="text-xs opacity-40 font-mono">{strings.size}: {formatSize(response.size)}</span>
+          </div>
+
+          {/* Response headers */}
+          {Object.keys(response.headers).length > 0 && (
+            <details className="group">
+              <summary className="text-xs uppercase tracking-wider opacity-40 font-medium cursor-pointer hover:opacity-60 transition-opacity list-none flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3 h-3 transition-transform group-open:rotate-90">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                </svg>
+                {strings.headers} ({Object.keys(response.headers).length})
+              </summary>
+              <div className="mt-2 rounded-lg border !border-[var(--header-border-color)] overflow-hidden">
+                {Object.entries(response.headers).map(([k, v]) => (
+                  <div key={k} className="flex text-xs font-mono border-b last:border-b-0 !border-[var(--header-border-color)]">
+                    <span className="shrink-0 w-48 px-3 py-1.5 opacity-50 truncate">{k}</span>
+                    <span className="flex-1 px-3 py-1.5 opacity-70 truncate">{v}</span>
+                  </div>
+                ))}
+              </div>
+            </details>
+          )}
+
+          {/* Response body */}
+          <div className="rounded-xl border !border-[var(--header-border-color)] overflow-hidden relative">
+            <pre className="p-4 text-sm font-mono leading-relaxed opacity-70 max-h-[400px] overflow-auto whitespace-pre-wrap break-words">
+              {formattedBody || " "}
+            </pre>
+            <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-[var(--background)] to-transparent pointer-events-none" />
+          </div>
+        </div>
+      )}
+
+      {!response && !error && !loading && (
+        <div className="text-center py-8">
+          <p className="text-sm opacity-30">{strings.noResponse}</p>
+          <p className="text-[10px] opacity-20 mt-1">Ctrl + Enter</p>
+        </div>
+      )}
     </div>
   );
 }

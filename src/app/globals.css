@@ -53,6 +53,28 @@ body {
 	animation: gradient-wave 5s ease infinite;
 }
 
+@keyframes combobox-in {
+	0% {
+		opacity: 0;
+		transform: translateY(-4px) scale(0.97);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0) scale(1);
+	}
+}
+
+@keyframes combobox-out {
+	0% {
+		opacity: 1;
+		transform: translateY(0) scale(1);
+	}
+	100% {
+		opacity: 0;
+		transform: translateY(-4px) scale(0.97);
+	}
+}
+
 @keyframes fadeSlideUp {
 	0% {
 		opacity: 0;
