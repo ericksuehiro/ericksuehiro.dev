@@ -275,7 +275,7 @@ export default function Utils() {
       </aside>
 
       {/* Mobile top bar */}
-      <div className="md:hidden absolute top-14 left-0 right-0 z-30 border-b !border-[var(--header-border-color)] bg-[var(--background)]/80 backdrop-blur-xl">
+      <div className="md:hidden absolute top-0 left-0 right-0 z-30 border-b !border-[var(--header-border-color)] bg-[var(--background)]/80 backdrop-blur-xl">
         <div className="flex items-center gap-1 px-3 py-2 overflow-x-auto scrollbar-hide">
           <button
             type="button"
@@ -309,7 +309,7 @@ export default function Utils() {
       </div>
 
       {/* Main content */}
-      <main className="flex-1 min-w-0 px-4 sm:px-6 md:px-8 pt-16 md:pt-6 pb-12 overflow-y-auto">
+      <main className="flex-1 min-w-0 px-4 sm:px-6 md:px-8 pt-12 md:pt-6 pb-12 overflow-y-auto">
         {activeToolData && (
           <div
             key={activeTool}

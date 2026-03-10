@@ -12,6 +12,7 @@ export default function Header() {
 
   const [isNotAtTop, setIsNotAtTop] = useState(false);
   const [isUtilsActive, setIsUtilsActive] = useState(false);
+  const [isMd, setIsMd] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -22,6 +23,14 @@ export default function Header() {
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)");
+    setIsMd(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setIsMd(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
   }, []);
 
   // Watch for data-utils-active attribute changes
@@ -35,10 +44,11 @@ export default function Header() {
 
   return (
     <div
-      className={`fixed top-0 left-0 right-0 z-50 flex justify-center ${isUtilsActive ? "items-center" : "h-14 md:h-20 items-end"}`}
+      className="fixed top-0 left-0 right-0 z-50 flex justify-center items-end"
       style={{
+        height: isUtilsActive ? (isMd ? "4rem" : "3rem") : (isMd ? "5rem" : "3.5rem"),
         padding: isUtilsActive ? "0" : "0 1rem",
-        transition: "padding 0.5s cubic-bezier(0.16, 1, 0.3, 1)",
+        transition: "padding 0.5s cubic-bezier(0.16, 1, 0.3, 1), height 0.5s cubic-bezier(0.16, 1, 0.3, 1)",
       }}
     >
       <div
