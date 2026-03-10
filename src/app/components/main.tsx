@@ -88,7 +88,7 @@ export default function Main() {
         <div
           style={{
             opacity: mounted ? 1 : 0,
-            transform: mounted ? "translateY(0) scale(1)" : "translateY(40px) scale(0.97)",
+            transform: mounted ? "translateY(0)" : "translateY(40px)",
             transition: "all 1s cubic-bezier(0.16, 1, 0.3, 1) 0.1s",
           }}
         >
