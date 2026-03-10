@@ -221,7 +221,41 @@ export default function Utils() {
 
   // Sidebar + content view — tool selected
   return (
-    <div className="flex fixed inset-0 w-full pt-12 md:pt-16 bg-[var(--background)] z-40">
+    <div className="flex flex-col md:flex-row fixed inset-0 w-full pt-12 md:pt-16 bg-[var(--background)] z-40">
+      {/* Mobile top bar */}
+      <div className="md:hidden shrink-0 border-b !border-[var(--header-border-color)] bg-[var(--background)]/80 backdrop-blur-xl">
+        <div className="flex items-center gap-1 px-3 py-2 overflow-x-auto scrollbar-hide">
+          <button
+            type="button"
+            onClick={() => setActiveTool(null)}
+            className="shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs opacity-40 hover:opacity-70 transition-opacity"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3.5 h-3.5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+            </svg>
+          </button>
+          <div className="w-px h-5 bg-[var(--header-border-color)] shrink-0" />
+          {tools.map((tool) => {
+            const isActive = activeTool === tool.id;
+            return (
+              <button
+                key={tool.id}
+                type="button"
+                onClick={() => handleSelectTool(tool.id)}
+                className={`shrink-0 flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 ${
+                  isActive ? "bg-white/10 opacity-90" : "opacity-40 hover:opacity-60"
+                }`}
+              >
+                <div className={`w-4 h-4 rounded bg-gradient-to-br ${tool.gradient} [&>svg]:w-2.5 [&>svg]:h-2.5 text-white flex items-center justify-center`}>
+                  {tool.icon}
+                </div>
+                {tool.title}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
       {/* Sidebar */}
       <aside className="hidden md:flex flex-col w-56 shrink-0 border-r !border-[var(--header-border-color)] pt-6 pb-8 px-3 overflow-y-auto">
         <button
@@ -274,42 +308,8 @@ export default function Utils() {
         </div>
       </aside>
 
-      {/* Mobile top bar */}
-      <div className="md:hidden absolute top-0 left-0 right-0 z-30 border-b !border-[var(--header-border-color)] bg-[var(--background)]/80 backdrop-blur-xl">
-        <div className="flex items-center gap-1 px-3 py-2 overflow-x-auto scrollbar-hide">
-          <button
-            type="button"
-            onClick={() => setActiveTool(null)}
-            className="shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs opacity-40 hover:opacity-70 transition-opacity"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3.5 h-3.5">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-            </svg>
-          </button>
-          <div className="w-px h-5 bg-[var(--header-border-color)] shrink-0" />
-          {tools.map((tool) => {
-            const isActive = activeTool === tool.id;
-            return (
-              <button
-                key={tool.id}
-                type="button"
-                onClick={() => handleSelectTool(tool.id)}
-                className={`shrink-0 flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 ${
-                  isActive ? "bg-white/10 opacity-90" : "opacity-40 hover:opacity-60"
-                }`}
-              >
-                <div className={`w-4 h-4 rounded bg-gradient-to-br ${tool.gradient} [&>svg]:w-2.5 [&>svg]:h-2.5 text-white flex items-center justify-center`}>
-                  {tool.icon}
-                </div>
-                {tool.title}
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
       {/* Main content */}
-      <main className="flex-1 min-w-0 px-4 sm:px-6 md:px-8 pt-12 md:pt-6 pb-12 overflow-y-auto">
+      <main className="flex-1 min-w-0 px-4 sm:px-6 md:px-8 pt-4 md:pt-6 pb-12 overflow-y-auto">
         {activeToolData && (
           <div
             key={activeTool}
