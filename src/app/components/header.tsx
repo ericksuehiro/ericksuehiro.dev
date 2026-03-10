@@ -4,9 +4,11 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { useI18n } from "../i18n/context";
 
 export default function Header() {
   const path = usePathname();
+  const { locale, setLocale, t } = useI18n();
 
   const [isNotAtTop, setIsNotAtTop] = useState(false);
 
@@ -22,14 +24,12 @@ export default function Header() {
   }, []);
 
   return (
-    <div className="h-14 md:h-20 flex justify-center items-end bg-opacity-35">
-      <div className="absolute inset-0 backdrop-blur-sm rounded-xl h-1/2" />
-
+    <div className="fixed top-0 left-0 right-0 z-50 h-14 md:h-20 flex justify-center items-end px-4">
       <div
-        className={`h-12 md:h-16 max-w-7xl w-full mr-4 ml-4 border transition-all ease-in-out rounded-lg !backdrop-blur-xl flex items-center
+        className={`relative h-12 md:h-16 max-w-5xl w-full mx-auto px-5 border transition-all ease-in-out rounded-lg backdrop-blur-xl flex items-center
         ${
           isNotAtTop
-            ? "!border-[var(--header-border-color)] shadow-md pl-5 pr-5"
+            ? "!border-[var(--header-border-color)] shadow-md bg-[var(--background)]/80"
             : "!border-transparent"
         }
         `}
@@ -46,11 +46,10 @@ export default function Header() {
           />
         </Link>
 
-        <div className="w-full flex justify-end md:justify-end gap-5">
+        <div className="w-full flex justify-end md:justify-end gap-5 items-center">
           {[
-            // { name: "Home", href: "/" },
-            { name: "Projects", href: "/projects" },
-            { name: "Utils", href: "/utils" },
+            { name: t.nav.projects, href: "/projects" },
+            { name: t.nav.utils, href: "/utils" },
           ].map((item) => (
             <Link
               key={item.href}
@@ -62,6 +61,14 @@ export default function Header() {
               {item.name}
             </Link>
           ))}
+
+          <button
+            type="button"
+            onClick={() => setLocale(locale === "en" ? "pt" : "en")}
+            className="text-[11px] uppercase tracking-wider opacity-30 hover:opacity-70 transition-opacity duration-300 border !border-[var(--header-border-color)] px-2 py-1 rounded-md"
+          >
+            {locale === "en" ? "PT" : "EN"}
+          </button>
         </div>
       </div>
     </div>

@@ -3,8 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-
-const roles = ["Full Stack Developer", "Frontend", "Backend", "Problem Solver"];
+import { useI18n } from "../i18n/context";
 
 const socials = [
   {
@@ -22,28 +21,33 @@ const socials = [
 export default function Main() {
   const [mounted, setMounted] = useState(false);
   const [roleIndex, setRoleIndex] = useState(0);
+  const { t } = useI18n();
+
   useEffect(() => {
     setMounted(true);
   }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setRoleIndex((prev) => (prev + 1) % roles.length);
+      setRoleIndex((prev) => (prev + 1) % t.hero.roles.length);
     }, 2500);
     return () => clearInterval(interval);
-  }, []);
+  }, [t.hero.roles.length]);
 
   return (
     <div
       className="relative min-h-[calc(100vh-5rem)] w-full flex items-center justify-center overflow-x-clip"
     >
-      {/* Grid pattern background */}
+      {/* Grid pattern background with top fade */}
       <div
-        className="absolute inset-0 opacity-[0.03] pointer-events-none"
+        className="absolute inset-0 pointer-events-none"
         style={{
           backgroundImage:
             "linear-gradient(var(--foreground) 1px, transparent 1px), linear-gradient(90deg, var(--foreground) 1px, transparent 1px)",
           backgroundSize: "80px 80px",
+          opacity: 0.03,
+          maskImage: "linear-gradient(to bottom, transparent 0%, black 40%)",
+          WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 40%)",
         }}
       />
 
@@ -57,7 +61,7 @@ export default function Main() {
         }}
       />
 
-      <div className="relative w-full max-w-5xl px-4 sm:px-6 py-20 md:py-32">
+      <div className="relative w-full max-w-5xl px-4 sm:px-6 py-16 md:py-32">
         {/* Top row — role rotator */}
         <div
           className="mb-8 overflow-hidden h-6"
@@ -75,7 +79,7 @@ export default function Main() {
                 animation: "fadeSlideUp 0.5s ease forwards",
               }}
             >
-              {roles[roleIndex]}
+              {t.hero.roles[roleIndex]}
             </span>
           </div>
         </div>
@@ -107,7 +111,7 @@ export default function Main() {
         </div>
 
         {/* Description + CTA area */}
-        <div className="mt-12 md:mt-16 flex flex-col md:flex-row md:items-end md:justify-between gap-10">
+        <div className="mt-10 md:mt-16 flex flex-col md:flex-row md:items-end md:justify-between gap-8 md:gap-10">
           {/* Left — bio */}
           <div
             className="max-w-md"
@@ -118,7 +122,7 @@ export default function Main() {
             }}
           >
             <p className="text-base md:text-lg leading-relaxed opacity-40">
-              Building robust digital experiences with clean code and modern technologies. Focused on performance, scalability, and craft.
+              {t.hero.bio}
             </p>
 
             {/* Socials */}
@@ -160,7 +164,7 @@ export default function Main() {
               {/* Button gradient bg */}
               <div className="absolute inset-0 bg-gradient-to-r from-[#04D361] to-emerald-600 transition-all duration-300 group-hover:from-[#04D361] group-hover:to-purple-500" />
               <span className="relative text-sm font-semibold text-white">
-                Projects
+                {t.nav.projects}
               </span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -179,7 +183,7 @@ export default function Main() {
               className="group inline-flex items-center gap-2.5 px-6 py-3 rounded-xl border !border-[var(--header-border-color)] hover:!border-[#04D361]/30 transition-all duration-300"
             >
               <span className="text-sm font-medium opacity-50 group-hover:opacity-80 transition-opacity duration-300">
-                Utils
+                {t.nav.utils}
               </span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -197,13 +201,13 @@ export default function Main() {
 
         {/* Scroll indicator */}
         <div
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+          className="hidden md:flex absolute bottom-8 left-1/2 -translate-x-1/2 flex-col items-center gap-2"
           style={{
             opacity: mounted ? 0.2 : 0,
             transition: "opacity 1.2s ease 1s",
           }}
         >
-          <span className="text-[10px] uppercase tracking-[0.3em]">Scroll</span>
+          <span className="text-[10px] uppercase tracking-[0.3em]">{t.hero.scroll}</span>
           <div className="w-px h-8 bg-gradient-to-b from-current to-transparent animate-pulse" />
         </div>
       </div>
