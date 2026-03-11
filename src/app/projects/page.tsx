@@ -21,6 +21,14 @@ const projectsMeta = [
     accentColor: "#04D361",
     logo: "/logo.svg",
   },
+  {
+    tags: ["Next.js 16", "Prisma", "DeepSeek AI", "NextAuth", "TypeScript"],
+    href: "https://grimorio.ericksuehiro.dev",
+    gradient: "from-[#d4a843] via-[#f0d78c] to-[#8b7536]",
+    accentColor: "#d4a843",
+    logo: "/grimorioLogo.svg",
+    logoBg: "linear-gradient(135deg, #1c1917 0%, #292524 50%, #1c1917 100%)",
+  },
 ];
 
 export default function Projects() {

@@ -55,6 +55,11 @@ const translations = {
           description:
             "My personal portfolio website, built from scratch to showcase my journey, skills, and projects. Features animated gradients, scroll-based animations, and a clean modern design.",
         },
+        {
+          title: "Grimório RPG",
+          description:
+            "A D&D 5e character sheet and session management platform with an integrated AI assistant. Create characters, form groups, run sessions with DM tools, and get real-time help with rules, spells, and mechanics.",
+        },
       ],
     },
 
@@ -181,6 +186,11 @@ const translations = {
           title: "ericksuehiro.dev",
           description:
             "Meu site pessoal de portfólio, construído do zero para mostrar minha jornada, habilidades e projetos. Possui gradientes animados, animações baseadas em scroll e um design moderno e limpo.",
+        },
+        {
+          title: "Grimório RPG",
+          description:
+            "Uma plataforma de fichas de personagem e gerenciamento de sessões para D&D 5e com assistente de IA integrado. Crie personagens, forme grupos, conduza sessões com ferramentas de mestre e receba ajuda em tempo real com regras, magias e mecânicas.",
         },
       ],
     },
