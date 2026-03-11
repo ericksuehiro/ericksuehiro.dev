@@ -7,7 +7,7 @@ import { useI18n } from "../i18n/context";
 
 const projectsMeta = [
   {
-    tags: ["Next.js", "TypeScript", "Tailwind CSS"],
+    tags: ["Next.js", "Prisma", "NextAuth", "Tailwind CSS", "TypeScript"],
     href: "https://careerup.me",
     gradient: "from-purple-400 via-white to-purple-500",
     accentColor: "#a855f7",
