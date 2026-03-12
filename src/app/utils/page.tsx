@@ -29,7 +29,7 @@ function toggleFavorite(toolId: string): string[] {
   return favs;
 }
 
-const VALID_TOOLS = ["pdf-to-text", "html-preview", "text-diff", "api-tester"];
+const VALID_TOOLS = ["pdf-to-text", "html-preview", "text-diff", "api-tester", "base64"];
 
 export default function UtilsPage() {
   return (
@@ -122,6 +122,18 @@ function Utils() {
       ),
       gradient: "from-amber-400 via-orange-400 to-red-500",
       accentColor: "#f59e0b",
+    },
+    {
+      id: "base64",
+      title: t.utils.base64.title,
+      description: t.utils.base64.description,
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 7.5h-.75A2.25 2.25 0 004.5 9.75v7.5a2.25 2.25 0 002.25 2.25h7.5a2.25 2.25 0 002.25-2.25v-7.5a2.25 2.25 0 00-2.25-2.25h-.75m-6 3.75l3 3m0 0l3-3m-3 3V1.5m6 9h.75a2.25 2.25 0 012.25 2.25v7.5a2.25 2.25 0 01-2.25 2.25h-7.5a2.25 2.25 0 01-2.25-2.25v-.75" />
+        </svg>
+      ),
+      gradient: "from-cyan-400 via-sky-400 to-blue-500",
+      accentColor: "#38bdf8",
     },
   ];
 
@@ -358,6 +370,7 @@ function Utils() {
               {activeTool === "html-preview" && <HtmlPreview />}
               {activeTool === "text-diff" && <TextDiff />}
               {activeTool === "api-tester" && <ApiTester />}
+              {activeTool === "base64" && <Base64Tool />}
             </div>
           </div>
         )}
@@ -1660,6 +1673,304 @@ function TextDiff() {
           <p className="text-sm opacity-40">{strings.noDifferences}</p>
         </div>
       )}
+    </div>
+  );
+}
+
+/* ─── Base64 Encoder/Decoder ─── */
+
+function Base64Tool() {
+  const { t } = useI18n();
+  const strings = t.utils.base64;
+
+  const [mode, setMode] = useState<"encode" | "decode">("encode");
+  const [inputType, setInputType] = useState<"text" | "image">("text");
+  const [textInput, setTextInput] = useState("");
+  const [base64Input, setBase64Input] = useState("");
+  const [output, setOutput] = useState("");
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [decodedImage, setDecodedImage] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Encode text
+  useEffect(() => {
+    if (mode === "encode" && inputType === "text") {
+      if (!textInput) { setOutput(""); return; }
+      try {
+        setOutput(btoa(unescape(encodeURIComponent(textInput))));
+        setError(null);
+      } catch {
+        setError(strings.invalidBase64);
+      }
+    }
+  }, [textInput, mode, inputType, strings.invalidBase64]);
+
+  // Decode base64
+  useEffect(() => {
+    if (mode === "decode") {
+      if (!base64Input) { setOutput(""); setDecodedImage(null); return; }
+      const trimmed = base64Input.trim();
+      // Check if it's an image data URL or raw base64 image
+      if (trimmed.startsWith("data:image/")) {
+        setDecodedImage(trimmed);
+        setOutput("");
+        setError(null);
+        return;
+      }
+      try {
+        const decoded = decodeURIComponent(escape(atob(trimmed)));
+        setOutput(decoded);
+        setDecodedImage(null);
+        setError(null);
+      } catch {
+        // Might be a raw base64 image
+        try {
+          atob(trimmed);
+          setDecodedImage(`data:image/png;base64,${trimmed}`);
+          setOutput("");
+          setError(null);
+        } catch {
+          setError(strings.invalidBase64);
+          setOutput("");
+          setDecodedImage(null);
+        }
+      }
+    }
+  }, [base64Input, mode, strings.invalidBase64]);
+
+  const handleImageFile = useCallback((file: File) => {
+    if (!file.type.startsWith("image/")) {
+      setError(strings.invalidImage);
+      return;
+    }
+    setError(null);
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = reader.result as string;
+      setImagePreview(result);
+      setOutput(result);
+    };
+    reader.readAsDataURL(file);
+  }, [strings.invalidImage]);
+
+  const handleDrop = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const file = e.dataTransfer.files[0];
+    if (file) handleImageFile(file);
+  }, [handleImageFile]);
+
+  const handleCopy = useCallback(async () => {
+    const text = mode === "encode" ? output : (output || base64Input);
+    if (!text) return;
+    await navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
+  }, [mode, output, base64Input]);
+
+  const handleDownload = useCallback(() => {
+    if (mode === "decode" && decodedImage) {
+      const a = document.createElement("a");
+      a.href = decodedImage;
+      a.download = "decoded-image.png";
+      a.click();
+    } else if (output) {
+      const blob = new Blob([output], { type: "text/plain" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = mode === "encode" ? "encoded.txt" : "decoded.txt";
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }
+  }, [mode, output, decodedImage]);
+
+  const handleClear = useCallback(() => {
+    setTextInput("");
+    setBase64Input("");
+    setOutput("");
+    setImagePreview(null);
+    setDecodedImage(null);
+    setError(null);
+  }, []);
+
+  return (
+    <div className="space-y-4">
+      {/* Mode + Type toggles */}
+      <div className="flex flex-wrap items-center gap-3">
+        <div className="flex rounded-lg border !border-[var(--header-border-color)] overflow-hidden">
+          {(["encode", "decode"] as const).map((m) => (
+            <button
+              key={m}
+              type="button"
+              onClick={() => { setMode(m); handleClear(); }}
+              className={`px-4 py-2 text-sm font-medium transition-all duration-200 ${
+                mode === m ? "bg-white/10 opacity-90" : "opacity-40 hover:opacity-60"
+              }`}
+            >
+              {m === "encode" ? strings.encode : strings.decode}
+            </button>
+          ))}
+        </div>
+
+        {mode === "encode" && (
+          <div className="flex rounded-lg border !border-[var(--header-border-color)] overflow-hidden">
+            {(["text", "image"] as const).map((type) => (
+              <button
+                key={type}
+                type="button"
+                onClick={() => { setInputType(type); setOutput(""); setImagePreview(null); setError(null); }}
+                className={`px-4 py-2 text-sm font-medium transition-all duration-200 ${
+                  inputType === type ? "bg-white/10 opacity-90" : "opacity-40 hover:opacity-60"
+                }`}
+              >
+                {type === "text" ? strings.text : strings.image}
+              </button>
+            ))}
+          </div>
+        )}
+
+        <div className="flex-1" />
+
+        <button
+          type="button"
+          onClick={handleClear}
+          className="text-xs opacity-30 hover:opacity-60 transition-opacity"
+        >
+          {strings.clear}
+        </button>
+      </div>
+
+      {/* Input area */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        {/* Left: Input */}
+        <div className="space-y-2">
+          <label className="text-xs uppercase tracking-widest opacity-40 font-medium">
+            {mode === "encode" ? (inputType === "text" ? strings.text : strings.image) : "Base64"}
+          </label>
+
+          {mode === "encode" && inputType === "text" && (
+            <textarea
+              value={textInput}
+              onChange={(e) => setTextInput(e.target.value)}
+              placeholder={strings.inputPlaceholder}
+              className="w-full h-[300px] p-4 rounded-xl border !border-[var(--header-border-color)] bg-transparent text-sm font-mono leading-relaxed opacity-70 focus:opacity-100 focus:outline-none focus:!border-sky-400/40 transition-all duration-300 resize-none"
+              spellCheck={false}
+            />
+          )}
+
+          {mode === "encode" && inputType === "image" && (
+            <div
+              onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+              onDragLeave={() => setIsDragging(false)}
+              onDrop={handleDrop}
+              onClick={() => fileInputRef.current?.click()}
+              className={`relative flex flex-col items-center justify-center h-[300px] rounded-xl border-2 border-dashed transition-all duration-300 cursor-pointer ${
+                isDragging
+                  ? "!border-sky-400/60 bg-sky-400/5"
+                  : "!border-[var(--header-border-color)] hover:!border-sky-400/30"
+              }`}
+            >
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => { const f = e.target.files?.[0]; if (f) handleImageFile(f); }}
+              />
+              {imagePreview ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={imagePreview} alt="Preview" className="max-h-full max-w-full object-contain rounded-lg p-2" />
+              ) : (
+                <div className="text-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" className="w-12 h-12 mx-auto mb-3 opacity-20">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.41a2.25 2.25 0 013.182 0l2.909 2.91m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                  </svg>
+                  <p className="text-sm font-medium opacity-50">{strings.dropImage}</p>
+                  <p className="text-xs opacity-30 mt-1">{strings.dragOrClick}</p>
+                </div>
+              )}
+            </div>
+          )}
+
+          {mode === "decode" && (
+            <textarea
+              value={base64Input}
+              onChange={(e) => setBase64Input(e.target.value)}
+              placeholder={strings.base64Placeholder}
+              className="w-full h-[300px] p-4 rounded-xl border !border-[var(--header-border-color)] bg-transparent text-sm font-mono leading-relaxed opacity-70 focus:opacity-100 focus:outline-none focus:!border-sky-400/40 transition-all duration-300 resize-none"
+              spellCheck={false}
+            />
+          )}
+        </div>
+
+        {/* Right: Output */}
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <label className="text-xs uppercase tracking-widest opacity-40 font-medium">
+              {strings.output}
+            </label>
+            <div className="flex items-center gap-2">
+              {(output || decodedImage) && (
+                <>
+                  <button
+                    type="button"
+                    onClick={handleCopy}
+                    className="text-xs flex items-center gap-1.5 px-2.5 py-1 rounded-lg border !border-[var(--header-border-color)] opacity-40 hover:opacity-70 transition-all duration-200"
+                  >
+                    {copied ? (
+                      <>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3 h-3 text-emerald-400">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                        </svg>
+                        {strings.copied}
+                      </>
+                    ) : (
+                      <>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3 h-3">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M15.666 3.888A2.25 2.25 0 0013.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 01-.75.75H9.75a.75.75 0 01-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 01-2.25 2.25H6.75A2.25 2.25 0 014.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 011.927-.184" />
+                        </svg>
+                        {strings.copy}
+                      </>
+                    )}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleDownload}
+                    className="text-xs flex items-center gap-1.5 px-2.5 py-1 rounded-lg border !border-[var(--header-border-color)] opacity-40 hover:opacity-70 transition-all duration-200"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3 h-3">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                    </svg>
+                    {strings.download}
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
+
+          {error ? (
+            <div className="h-[300px] rounded-xl border !border-red-400/30 bg-red-400/5 flex items-center justify-center">
+              <p className="text-sm text-red-400">{error}</p>
+            </div>
+          ) : mode === "decode" && decodedImage ? (
+            <div className="h-[300px] rounded-xl border !border-[var(--header-border-color)] bg-[#111] flex items-center justify-center overflow-hidden">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={decodedImage} alt="Decoded" className="max-h-full max-w-full object-contain p-2" />
+            </div>
+          ) : output ? (
+            <pre className="h-[300px] p-4 rounded-xl border !border-[var(--header-border-color)] bg-[#111] text-sm font-mono leading-relaxed opacity-80 overflow-auto whitespace-pre-wrap break-all">
+              {output}
+            </pre>
+          ) : (
+            <div className="h-[300px] rounded-xl border !border-[var(--header-border-color)] flex items-center justify-center">
+              <p className="text-sm opacity-30">{strings.noOutput}</p>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

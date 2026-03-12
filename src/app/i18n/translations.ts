@@ -125,6 +125,26 @@ const translations = {
         noResponse: "Send a request to see the response",
         error: "Request failed",
       },
+      base64: {
+        title: "Base64",
+        description: "Encode and decode Base64 strings and images. Everything runs locally in your browser.",
+        encode: "Encode",
+        decode: "Decode",
+        text: "Text",
+        image: "Image",
+        inputPlaceholder: "Type or paste text here...",
+        base64Placeholder: "Paste Base64 string here...",
+        dropImage: "Drop an image here",
+        dragOrClick: "Drag & drop an image or click to browse",
+        output: "Output",
+        copy: "Copy",
+        copied: "Copied!",
+        download: "Download",
+        clear: "Clear",
+        invalidBase64: "Invalid Base64 string",
+        invalidImage: "Please drop a valid image file",
+        noOutput: "Enter text or an image to see the Base64 output",
+      },
     },
 
     // Footer
@@ -257,6 +277,26 @@ const translations = {
         noResponse: "Envie uma requisição para ver a resposta",
         error: "Requisição falhou",
       },
+      base64: {
+        title: "Base64",
+        description: "Codifique e decodifique strings e imagens em Base64. Tudo roda localmente no seu navegador.",
+        encode: "Codificar",
+        decode: "Decodificar",
+        text: "Texto",
+        image: "Imagem",
+        inputPlaceholder: "Digite ou cole o texto aqui...",
+        base64Placeholder: "Cole a string Base64 aqui...",
+        dropImage: "Solte uma imagem aqui",
+        dragOrClick: "Arraste e solte uma imagem ou clique para buscar",
+        output: "Saída",
+        copy: "Copiar",
+        copied: "Copiado!",
+        download: "Baixar",
+        clear: "Limpar",
+        invalidBase64: "String Base64 inválida",
+        invalidImage: "Por favor, solte um arquivo de imagem válido",
+        noOutput: "Digite texto ou uma imagem para ver a saída em Base64",
+      },
     },
 
     // Footer
@@ -341,6 +381,26 @@ export type Translations = {
       copyResponse: string;
       noResponse: string;
       error: string;
+    };
+    base64: {
+      title: string;
+      description: string;
+      encode: string;
+      decode: string;
+      text: string;
+      image: string;
+      inputPlaceholder: string;
+      base64Placeholder: string;
+      dropImage: string;
+      dragOrClick: string;
+      output: string;
+      copy: string;
+      copied: string;
+      download: string;
+      clear: string;
+      invalidBase64: string;
+      invalidImage: string;
+      noOutput: string;
     };
   };
   footer: { role: string };
