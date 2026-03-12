@@ -1519,30 +1519,73 @@ function ApiTester() {
 
 /* ─── Text Diff ─── */
 
+interface WordSegment {
+  text: string;
+  type: "unchanged" | "added" | "removed";
+}
+
 interface DiffLine {
   type: "added" | "removed" | "unchanged";
   text: string;
+  words?: WordSegment[];
+}
+
+function lcs<T>(a: T[], b: T[]): number[][] {
+  const m = a.length, n = b.length;
+  const dp: number[][] = Array.from({ length: m + 1 }, () => Array(n + 1).fill(0));
+  for (let i = 1; i <= m; i++) {
+    for (let j = 1; j <= n; j++) {
+      dp[i][j] = a[i - 1] === b[j - 1]
+        ? dp[i - 1][j - 1] + 1
+        : Math.max(dp[i - 1][j], dp[i][j - 1]);
+    }
+  }
+  return dp;
+}
+
+function computeWordDiff(oldLine: string, newLine: string): { removed: WordSegment[]; added: WordSegment[] } {
+  // Split by word boundaries, keeping whitespace as separate tokens
+  const tokenize = (s: string) => s.split(/(\s+)/);
+  const oldTokens = tokenize(oldLine);
+  const newTokens = tokenize(newLine);
+
+  const dp = lcs(oldTokens, newTokens);
+
+  const removedSegs: WordSegment[] = [];
+  const addedSegs: WordSegment[] = [];
+
+  let i = oldTokens.length, j = newTokens.length;
+  const rStack: WordSegment[] = [];
+  const aStack: WordSegment[] = [];
+
+  while (i > 0 || j > 0) {
+    if (i > 0 && j > 0 && oldTokens[i - 1] === newTokens[j - 1]) {
+      rStack.push({ text: oldTokens[i - 1], type: "unchanged" });
+      aStack.push({ text: newTokens[j - 1], type: "unchanged" });
+      i--; j--;
+    } else if (j > 0 && (i === 0 || dp[i][j - 1] >= dp[i - 1][j])) {
+      aStack.push({ text: newTokens[j - 1], type: "added" });
+      j--;
+    } else {
+      rStack.push({ text: oldTokens[i - 1], type: "removed" });
+      i--;
+    }
+  }
+
+  while (rStack.length) removedSegs.push(rStack.pop()!);
+  while (aStack.length) addedSegs.push(aStack.pop()!);
+
+  return { removed: removedSegs, added: addedSegs };
 }
 
 function computeDiff(original: string, modified: string): DiffLine[] {
   const origLines = original.split("\n");
   const modLines = modified.split("\n");
 
-  const m = origLines.length;
-  const n = modLines.length;
+  const dp = lcs(origLines, modLines);
 
-  // LCS via DP
-  const dp: number[][] = Array.from({ length: m + 1 }, () => Array(n + 1).fill(0));
-  for (let i = 1; i <= m; i++) {
-    for (let j = 1; j <= n; j++) {
-      dp[i][j] = origLines[i - 1] === modLines[j - 1]
-        ? dp[i - 1][j - 1] + 1
-        : Math.max(dp[i - 1][j], dp[i][j - 1]);
-    }
-  }
-
-  const result: DiffLine[] = [];
-  let i = m, j = n;
+  const rawResult: DiffLine[] = [];
+  let i = origLines.length, j = modLines.length;
   const stack: DiffLine[] = [];
 
   while (i > 0 || j > 0) {
@@ -1558,7 +1601,27 @@ function computeDiff(original: string, modified: string): DiffLine[] {
     }
   }
 
-  while (stack.length) result.push(stack.pop()!);
+  while (stack.length) rawResult.push(stack.pop()!);
+
+  // Pair consecutive removed+added lines and compute word-level diff
+  const result: DiffLine[] = [];
+  let idx = 0;
+  while (idx < rawResult.length) {
+    if (
+      rawResult[idx].type === "removed" &&
+      idx + 1 < rawResult.length &&
+      rawResult[idx + 1].type === "added"
+    ) {
+      const { removed, added } = computeWordDiff(rawResult[idx].text, rawResult[idx + 1].text);
+      result.push({ ...rawResult[idx], words: removed });
+      result.push({ ...rawResult[idx + 1], words: added });
+      idx += 2;
+    } else {
+      result.push(rawResult[idx]);
+      idx++;
+    }
+  }
+
   return result;
 }
 
@@ -1659,7 +1722,24 @@ function TextDiff() {
                     {line.type === "added" ? "+" : line.type === "removed" ? "−" : " "}
                   </span>
                   <pre className="flex-1 px-3 py-0.5 leading-6 whitespace-pre-wrap break-words opacity-70">
-                    {line.text || " "}
+                    {line.words ? (
+                      line.words.map((seg, si) => (
+                        <span
+                          key={si}
+                          className={
+                            seg.type === "added"
+                              ? "bg-emerald-400/25 text-emerald-300 rounded-sm"
+                              : seg.type === "removed"
+                              ? "bg-red-400/25 text-red-300 rounded-sm"
+                              : ""
+                          }
+                        >
+                          {seg.text}
+                        </span>
+                      ))
+                    ) : (
+                      line.text || " "
+                    )}
                   </pre>
                 </div>
               ))}
