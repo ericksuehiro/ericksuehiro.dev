@@ -60,6 +60,11 @@ const translations = {
           description:
             "A D&D 5e character sheet and session management platform with an integrated AI assistant. Create characters, form groups, run sessions with DM tools, and get real-time help with rules, spells, and mechanics.",
         },
+        {
+          title: "AprendeAi",
+          description:
+            "An AI-powered programming education platform that creates personalized learning paths. Features adaptive study plans, integrated code challenges with automated testing, and a real-time AI tutor.",
+        },
       ],
     },
 
@@ -211,6 +216,11 @@ const translations = {
           title: "Grimório RPG",
           description:
             "Uma plataforma de fichas de personagem e gerenciamento de sessões para D&D 5e com assistente de IA integrado. Crie personagens, forme grupos, conduza sessões com ferramentas de mestre e receba ajuda em tempo real com regras, magias e mecânicas.",
+        },
+        {
+          title: "AprendeAi",
+          description:
+            "Uma plataforma de ensino de programação com IA que cria trilhas de aprendizado personalizadas. Possui planos de estudo adaptativos, desafios de código integrados com testes automatizados e um tutor de IA em tempo real.",
         },
       ],
     },

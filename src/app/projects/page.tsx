@@ -29,6 +29,14 @@ const projectsMeta = [
     logo: "/grimorioLogo.svg",
     logoBg: "linear-gradient(135deg, #1c1917 0%, #292524 50%, #1c1917 100%)",
   },
+  {
+    tags: ["Next.js", "Prisma", "OpenAI", "NextAuth", "CodeMirror", "TypeScript"],
+    href: "https://aprendeai.ericksuehiro.dev",
+    gradient: "from-cyan-400 via-blue-500 to-purple-500",
+    accentColor: "#22d3ee",
+    logo: "/aprendeaiLogo.svg",
+    logoBg: "linear-gradient(135deg, #080c15 0%, #111827 50%, #080c15 100%)",
+  },
 ];
 
 export default function Projects() {
