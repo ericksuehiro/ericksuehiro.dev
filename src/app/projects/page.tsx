@@ -37,6 +37,14 @@ const projectsMeta = [
     logo: "/aprendeaiLogo.svg",
     logoBg: "linear-gradient(135deg, #080c15 0%, #111827 50%, #080c15 100%)",
   },
+  {
+    tags: ["Next.js", "Claude Agent SDK", "PWA", "Web Push", "TypeScript"],
+    href: "https://github.com/ericksuehiro/darwin",
+    gradient: "from-orange-400 via-amber-400 to-red-500",
+    accentColor: "#fb923c",
+    logo: "/darwinLogo.svg",
+    logoBg: "linear-gradient(135deg, #431407 0%, #7c2d12 50%, #431407 100%)",
+  },
 ];
 
 export default function Projects() {

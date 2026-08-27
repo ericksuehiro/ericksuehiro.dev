@@ -65,6 +65,11 @@ const translations = {
           description:
             "An AI-powered programming education platform that creates personalized learning paths. Features adaptive study plans, integrated code challenges with automated testing, and a real-time AI tutor.",
         },
+        {
+          title: "Darwin",
+          description:
+            "A mobile-first, installable chat UI for Claude Code, self-hosted on my own server. Real-time streaming, web push, and a full Claude Agent SDK integration so the agent can build and ship its own features.",
+        },
       ],
     },
 
@@ -221,6 +226,11 @@ const translations = {
           title: "AprendeAi",
           description:
             "Uma plataforma de ensino de programação com IA que cria trilhas de aprendizado personalizadas. Possui planos de estudo adaptativos, desafios de código integrados com testes automatizados e um tutor de IA em tempo real.",
+        },
+        {
+          title: "Darwin",
+          description:
+            "Uma interface de chat mobile-first e instalável para o Claude Code, hospedada no meu próprio servidor. Streaming em tempo real, notificações push e integração completa com o Claude Agent SDK para o agente construir e subir suas próprias features.",
         },
       ],
     },
