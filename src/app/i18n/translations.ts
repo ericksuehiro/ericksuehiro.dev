@@ -65,6 +65,11 @@ const translations = {
           description:
             "An AI-powered programming education platform that creates personalized learning paths. Features adaptive study plans, integrated code challenges with automated testing, and a real-time AI tutor.",
         },
+        {
+          title: "K-GUESS",
+          description:
+            "Nine daily K-pop guessing games: name the MV from its frames, the song from its intro, the idol behind the effect, and more. Every win opens a pack of collectible photocards in a 3D opening scene. The server owns the game, so answers never reach the browser. Available in Portuguese, English and Spanish.",
+        },
       ],
     },
 
@@ -221,6 +226,11 @@ const translations = {
           title: "AprendeAi",
           description:
             "Uma plataforma de ensino de programação com IA que cria trilhas de aprendizado personalizadas. Possui planos de estudo adaptativos, desafios de código integrados com testes automatizados e um tutor de IA em tempo real.",
+        },
+        {
+          title: "K-GUESS",
+          description:
+            "Nove jogos diários de K-pop: adivinhe o MV pelos frames, a música pelo começo, o idol escondido atrás do efeito e mais. Cada acerto abre um pacote de photocards colecionáveis numa abertura em 3D. O servidor é o dono do jogo, então a resposta nunca chega ao navegador. Em português, inglês e espanhol.",
         },
       ],
     },

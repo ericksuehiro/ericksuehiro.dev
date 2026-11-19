@@ -37,6 +37,14 @@ const projectsMeta = [
     logo: "/aprendeaiLogo.svg",
     logoBg: "linear-gradient(135deg, #080c15 0%, #111827 50%, #080c15 100%)",
   },
+  {
+    tags: ["JavaScript", "Three.js", "Cloudflare Pages", "D1", "Google OAuth"],
+    href: "https://kguess.com",
+    gradient: "from-[#ff72d2] via-[#d28cff] to-[#8a3df0]",
+    accentColor: "#ff72d2",
+    logo: "/kguessLogo.svg",
+    logoBg: "linear-gradient(135deg, #1f0848 0%, #3b1585 50%, #1f0848 100%)",
+  },
 ];
 
 export default function Projects() {
