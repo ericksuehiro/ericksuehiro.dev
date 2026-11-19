@@ -8,12 +8,12 @@ import { SectionHead } from "./section";
 
 /**
  * The work, as an index: number, name, what it is, what it's made of, and a
- * real screenshot of it running. `selected` keeps only projects that have a
- * screenshot (the home page); the projects page shows everything.
+ * real screenshot of it running. `selected` keeps only the featured projects
+ * (the home page); the projects page shows everything.
  */
 export default function Work({ selected = false }: { selected?: boolean }) {
   const { t } = useI18n();
-  const items = t.projects.items.filter((p) => workMeta[p.id] && (!selected || workMeta[p.id].shot));
+  const items = t.projects.items.filter((p) => workMeta[p.id] && (!selected || workMeta[p.id].featured));
 
   return (
     <section className="max-w-6xl mx-auto w-full px-5 sm:px-8 pb-20 md:pb-28">

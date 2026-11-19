@@ -74,7 +74,7 @@ export default function OpenGraphImage() {
             <span style={{ width: 14, height: 14, borderRadius: 9999, background: "#04d361" }} />
             Developer at Santander
           </span>
-          <span>K-GUESS · CareerUp · Grimório · AprendeAi</span>
+          <span>K-GUESS · CareerUp</span>
         </div>
       </div>
     ),

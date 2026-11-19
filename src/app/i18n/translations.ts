@@ -15,7 +15,7 @@ const translations = {
       kicker: "Software engineer · Brazil",
       now: "Developer at Santander",
       statement:
-        "Developer at Santander since 2022: Java and Spring on the backend, Angular on the front. Outside the bank I build products end to end — AI résumés, D&D character sheets, a coding school and daily K-pop games.",
+        "Developer at Santander since 2022: Java and Spring on the backend, Angular on the front. Outside the bank I build products end to end — from an AI résumé builder to daily K-pop games.",
     },
 
     sections: {
@@ -69,20 +69,6 @@ const translations = {
           kind: "SaaS",
           description:
             "A platform designed to help professionals level up their careers with smart tools and resources for job searching, resume building, and interview preparation.",
-        },
-        {
-          id: "grimorio",
-          title: "Grimório RPG",
-          kind: "RPG platform",
-          description:
-            "A D&D 5e character sheet and session management platform with an integrated AI assistant. Create characters, form groups, run sessions with DM tools, and get real-time help with rules, spells, and mechanics.",
-        },
-        {
-          id: "aprendeai",
-          title: "AprendeAi",
-          kind: "Education",
-          description:
-            "An AI-powered programming education platform that creates personalized learning paths. Features adaptive study plans, integrated code challenges with automated testing, and a real-time AI tutor.",
         },
         {
           id: "site",
@@ -202,7 +188,7 @@ const translations = {
       kicker: "Engenheiro de software · Brasil",
       now: "Desenvolvedor no Santander",
       statement:
-        "Desenvolvedor no Santander desde 2022: Java e Spring no backend, Angular no front. Fora do banco, construo produtos de ponta a ponta — currículos com IA, fichas de D&D, uma escola de programação e jogos diários de K-pop.",
+        "Desenvolvedor no Santander desde 2022: Java e Spring no backend, Angular no front. Fora do banco, construo produtos de ponta a ponta — de um gerador de currículos com IA a jogos diários de K-pop.",
     },
 
     sections: {
@@ -256,20 +242,6 @@ const translations = {
           kind: "SaaS",
           description:
             "Uma plataforma projetada para ajudar profissionais a evoluírem suas carreiras com ferramentas inteligentes e recursos para busca de emprego, criação de currículo e preparação para entrevistas.",
-        },
-        {
-          id: "grimorio",
-          title: "Grimório RPG",
-          kind: "Plataforma de RPG",
-          description:
-            "Uma plataforma de fichas de personagem e gerenciamento de sessões para D&D 5e com assistente de IA integrado. Crie personagens, forme grupos, conduza sessões com ferramentas de mestre e receba ajuda em tempo real com regras, magias e mecânicas.",
-        },
-        {
-          id: "aprendeai",
-          title: "AprendeAi",
-          kind: "Educação",
-          description:
-            "Uma plataforma de ensino de programação com IA que cria trilhas de aprendizado personalizadas. Possui planos de estudo adaptativos, desafios de código integrados com testes automatizados e um tutor de IA em tempo real.",
         },
         {
           id: "site",
