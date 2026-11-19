@@ -6,24 +6,35 @@ const translations = {
     nav: {
       projects: "Projects",
       utils: "Utils",
+      home: "Home",
+      language: "Português",
     },
 
     // Hero
     hero: {
-      label: "Software Engineer",
-      roles: ["Full Stack Developer", "Frontend", "Backend", "Problem Solver"],
-      bio: "Building robust digital experiences with clean code and modern technologies. Focused on performance, scalability, and craft.",
-      scroll: "Scroll",
+      kicker: "Software engineer · Brazil",
+      now: "Developer at Santander",
+      statement:
+        "Developer at Santander since 2022: Java and Spring on the backend, Angular on the front. Outside the bank I build products end to end — AI résumés, D&D character sheets, a coding school and daily K-pop games.",
+    },
+
+    sections: {
+      work: "Selected work",
+      experience: "Experience",
+      tools: "Tools",
+      toolsNote: "Small utilities that run entirely in your browser.",
+      seeAll: "All projects",
+      visit: "Visit",
     },
 
     // Journey
     journey: {
       label: "Experience",
-      title: "My Journey",
+      title: "Experience",
       experiences: [
         {
           company: "Santander",
-          period: "2022 — Present",
+          period: "2022 — now",
           role: "Developer",
           description:
             "Joined as a backend developer specializing in Java microservices with Spring. Transitioned to front-end development, delivering solutions with Angular as the primary framework.",
@@ -42,33 +53,43 @@ const translations = {
     projects: {
       label: "Portfolio",
       title: "Projects",
-      description: "Things I've built and contributed to.",
+      description: "Things I've designed, built and shipped — mostly on my own, end to end.",
       moreComingSoon: "More coming soon",
       items: [
         {
+          id: "kguess",
+          title: "K-GUESS",
+          kind: "Game · 2026",
+          description:
+            "Nine daily K-pop guessing games: name the MV from its frames, the song from its intro, the idol behind the effect, and more. Every win opens a pack of collectible photocards in a 3D opening scene. The server owns the game, so answers never reach the browser. Available in Portuguese, English and Spanish.",
+        },
+        {
+          id: "careerup",
           title: "CareerUp.me",
+          kind: "SaaS",
           description:
             "A platform designed to help professionals level up their careers with smart tools and resources for job searching, resume building, and interview preparation.",
         },
         {
-          title: "ericksuehiro.dev",
-          description:
-            "My personal portfolio website, built from scratch to showcase my journey, skills, and projects. Features animated gradients, scroll-based animations, and a clean modern design.",
-        },
-        {
+          id: "grimorio",
           title: "Grimório RPG",
+          kind: "RPG platform",
           description:
             "A D&D 5e character sheet and session management platform with an integrated AI assistant. Create characters, form groups, run sessions with DM tools, and get real-time help with rules, spells, and mechanics.",
         },
         {
+          id: "aprendeai",
           title: "AprendeAi",
+          kind: "Education",
           description:
             "An AI-powered programming education platform that creates personalized learning paths. Features adaptive study plans, integrated code challenges with automated testing, and a real-time AI tutor.",
         },
         {
-          title: "K-GUESS",
+          id: "site",
+          title: "ericksuehiro.dev",
+          kind: "This site",
           description:
-            "Nine daily K-pop guessing games: name the MV from its frames, the song from its intro, the idol behind the effect, and more. Every win opens a pack of collectible photocards in a 3D opening scene. The server owns the game, so answers never reach the browser. Available in Portuguese, English and Spanish.",
+            "This site. Next.js and the Geist typeface, real screenshots of the work, and a toolbox of utilities that run in the browser.",
         },
       ],
     },
@@ -79,6 +100,7 @@ const translations = {
       title: "Utils",
       description: "Free tools to make your life easier. Everything runs in your browser.",
       moreComingSoon: "More tools coming soon",
+      favorite: "Favorite",
       pdfToText: {
         title: "PDF to Text",
         description: "Extract text content from PDF files instantly. 100% client-side — your files never leave your browser.",
@@ -160,6 +182,9 @@ const translations = {
     // Footer
     footer: {
       role: "Software Engineer",
+      cta: "Let's talk.",
+      ctaText: "The quickest way to reach me is LinkedIn.",
+      built: "Designed and built by hand.",
     },
   },
 
@@ -168,24 +193,35 @@ const translations = {
     nav: {
       projects: "Projetos",
       utils: "Utils",
+      home: "Início",
+      language: "English",
     },
 
     // Hero
     hero: {
-      label: "Engenheiro de Software",
-      roles: ["Full Stack Developer", "Frontend", "Backend", "Problem Solver"],
-      bio: "Construindo experiências digitais robustas com código limpo e tecnologias modernas. Focado em performance, escalabilidade e qualidade.",
-      scroll: "Scroll",
+      kicker: "Engenheiro de software · Brasil",
+      now: "Desenvolvedor no Santander",
+      statement:
+        "Desenvolvedor no Santander desde 2022: Java e Spring no backend, Angular no front. Fora do banco, construo produtos de ponta a ponta — currículos com IA, fichas de D&D, uma escola de programação e jogos diários de K-pop.",
+    },
+
+    sections: {
+      work: "Trabalhos selecionados",
+      experience: "Experiência",
+      tools: "Ferramentas",
+      toolsNote: "Utilitários pequenos que rodam inteiros no seu navegador.",
+      seeAll: "Todos os projetos",
+      visit: "Visitar",
     },
 
     // Journey
     journey: {
       label: "Experiência",
-      title: "Minha Jornada",
+      title: "Experiência",
       experiences: [
         {
           company: "Santander",
-          period: "2022 — Presente",
+          period: "2022 — hoje",
           role: "Desenvolvedor",
           description:
             "Entrei como desenvolvedor backend especializado em microsserviços Java com Spring. Fiz a transição para desenvolvimento front-end, entregando soluções com Angular como framework principal.",
@@ -204,33 +240,43 @@ const translations = {
     projects: {
       label: "Portfólio",
       title: "Projetos",
-      description: "Coisas que eu construí e contribuí.",
+      description: "Coisas que eu desenhei, construí e coloquei no ar — quase sempre sozinho, de ponta a ponta.",
       moreComingSoon: "Mais em breve",
       items: [
         {
+          id: "kguess",
+          title: "K-GUESS",
+          kind: "Jogo · 2026",
+          description:
+            "Nove jogos diários de K-pop: adivinhe o MV pelos frames, a música pelo começo, o idol escondido atrás do efeito e mais. Cada acerto abre um pacote de photocards colecionáveis numa abertura em 3D. O servidor é o dono do jogo, então a resposta nunca chega ao navegador. Em português, inglês e espanhol.",
+        },
+        {
+          id: "careerup",
           title: "CareerUp.me",
+          kind: "SaaS",
           description:
             "Uma plataforma projetada para ajudar profissionais a evoluírem suas carreiras com ferramentas inteligentes e recursos para busca de emprego, criação de currículo e preparação para entrevistas.",
         },
         {
-          title: "ericksuehiro.dev",
-          description:
-            "Meu site pessoal de portfólio, construído do zero para mostrar minha jornada, habilidades e projetos. Possui gradientes animados, animações baseadas em scroll e um design moderno e limpo.",
-        },
-        {
+          id: "grimorio",
           title: "Grimório RPG",
+          kind: "Plataforma de RPG",
           description:
             "Uma plataforma de fichas de personagem e gerenciamento de sessões para D&D 5e com assistente de IA integrado. Crie personagens, forme grupos, conduza sessões com ferramentas de mestre e receba ajuda em tempo real com regras, magias e mecânicas.",
         },
         {
+          id: "aprendeai",
           title: "AprendeAi",
+          kind: "Educação",
           description:
             "Uma plataforma de ensino de programação com IA que cria trilhas de aprendizado personalizadas. Possui planos de estudo adaptativos, desafios de código integrados com testes automatizados e um tutor de IA em tempo real.",
         },
         {
-          title: "K-GUESS",
+          id: "site",
+          title: "ericksuehiro.dev",
+          kind: "Este site",
           description:
-            "Nove jogos diários de K-pop: adivinhe o MV pelos frames, a música pelo começo, o idol escondido atrás do efeito e mais. Cada acerto abre um pacote de photocards colecionáveis numa abertura em 3D. O servidor é o dono do jogo, então a resposta nunca chega ao navegador. Em português, inglês e espanhol.",
+            "Este site. Next.js e a fonte Geist, prints de verdade dos projetos e uma caixa de ferramentas que roda no navegador.",
         },
       ],
     },
@@ -241,6 +287,7 @@ const translations = {
       title: "Utils",
       description: "Ferramentas gratuitas para facilitar sua vida. Tudo roda no seu navegador.",
       moreComingSoon: "Mais ferramentas em breve",
+      favorite: "Favoritar",
       pdfToText: {
         title: "PDF para Texto",
         description: "Extraia o conteúdo de texto de arquivos PDF instantaneamente. 100% client-side — seus arquivos nunca saem do seu navegador.",
@@ -322,13 +369,17 @@ const translations = {
     // Footer
     footer: {
       role: "Engenheiro de Software",
+      cta: "Vamos conversar.",
+      ctaText: "O jeito mais rápido de falar comigo é pelo LinkedIn.",
+      built: "Desenhado e construído à mão.",
     },
   },
 } as const;
 
 export type Translations = {
-  nav: { projects: string; utils: string };
-  hero: { label: string; roles: readonly string[]; bio: string; scroll: string };
+  nav: { projects: string; utils: string; home: string; language: string };
+  hero: { kicker: string; now: string; statement: string };
+  sections: { work: string; experience: string; tools: string; toolsNote: string; seeAll: string; visit: string };
   journey: {
     label: string;
     title: string;
@@ -339,13 +390,14 @@ export type Translations = {
     title: string;
     description: string;
     moreComingSoon: string;
-    items: readonly { title: string; description: string }[];
+    items: readonly { id: string; title: string; kind: string; description: string }[];
   };
   utils: {
     label: string;
     title: string;
     description: string;
     moreComingSoon: string;
+    favorite: string;
     pdfToText: {
       title: string;
       description: string;
@@ -423,7 +475,7 @@ export type Translations = {
       noOutput: string;
     };
   };
-  footer: { role: string };
+  footer: { role: string; cta: string; ctaText: string; built: string };
 };
 
 export default translations as Record<Locale, Translations>;

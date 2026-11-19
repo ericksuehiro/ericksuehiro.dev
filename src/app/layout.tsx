@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import localFont from "next/font/local";
 import "./globals.css";
 import Header from "./components/header";
 import { I18nProvider } from "./i18n/context";
@@ -9,10 +10,28 @@ const SITE_TITLE = "Erick Suehiro | Software Engineer";
 const SITE_DESCRIPTION =
   "Portfolio de Erick Suehiro com projetos, experiência e ferramentas web construídas com foco em performance, produto e código limpo.";
 
+// Geist and Geist Mono ship with the repo (src/app/fonts) — no network at build
+// or at runtime, and no flash of Arial.
+const geist = localFont({
+  src: "./fonts/GeistVF.woff",
+  variable: "--font-geist",
+  weight: "100 900",
+  display: "swap",
+});
+const geistMono = localFont({
+  src: "./fonts/GeistMonoVF.woff",
+  variable: "--font-geist-mono",
+  weight: "100 900",
+  display: "swap",
+});
+
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#04D361",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f5f4ef" },
+    { media: "(prefers-color-scheme: dark)", color: "#0e0e0d" },
+  ],
 };
 
 export const metadata: Metadata = {
@@ -79,8 +98,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className="w-full flex flex-col">
+    <html lang="en" className={`${geist.variable} ${geistMono.variable}`}>
+      <body className="w-full min-h-screen flex flex-col">
         <I18nProvider>
           <Header />
           <div className="w-full flex justify-center">

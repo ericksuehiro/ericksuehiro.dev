@@ -2,32 +2,113 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * Tokens. Papel quente no claro, quase-preto quente no escuro; uma cor só de
+ * destaque (o verde da marca), usada pouco: o ponto de "agora", o sublinhado
+ * do link, a seleção. Sem degradê, sem brilho, sem vidro.
+ */
 :root {
-	--background: #ffffff;
-	--foreground: #171717;
-	--border-color: #2d2d2e;
+	--background: #f5f4ef;
+	--foreground: #171715;
+	--muted: rgba(23, 23, 21, 0.64);
+	--faint: rgba(23, 23, 21, 0.44);
+	--surface: #ebeae3;
+	--line: rgba(23, 23, 21, 0.12);
+	--accent: #04d361;
+	--accent-ink: #037a3b; /* verde legível sobre o papel claro (4,95:1, passa AA) */
+	--border-color: var(--line);
 	--filterInvert: 100%;
-	--header-border-color: hsla(0, 0%, 0%, 0.1);
+	--header-border-color: var(--line);
+	color-scheme: light;
 }
 
 @media (prefers-color-scheme: dark) {
 	:root {
-		--background: #0a0a0a;
-		--foreground: #ededed;
-		--border-color: #e5e7eb;
+		--background: #0e0e0d;
+		--foreground: #ecebe6;
+		--muted: rgba(236, 235, 230, 0.64);
+		--faint: rgba(236, 235, 230, 0.42);
+		--surface: #181816;
+		--line: rgba(236, 235, 230, 0.12);
+		--accent-ink: #04d361;
 		--filterInvert: 0;
-		--header-border-color: hsla(0, 0%, 100%, 0.1);
+		color-scheme: dark;
 	}
 }
 
 body {
 	color: var(--foreground);
 	background: var(--background);
-	font-family: Arial, Helvetica, sans-serif;
+	font-family: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+	font-feature-settings: "ss01", "cv11";
+	-webkit-font-smoothing: antialiased;
+	text-rendering: optimizeLegibility;
+}
+
+::selection {
+	background: var(--accent);
+	color: #0e0e0d;
 }
 
 * {
 	border-color: var(--border-color) !important;
+}
+
+:focus-visible {
+	outline: 2px solid var(--accent);
+	outline-offset: 3px;
+	border-radius: 4px;
+}
+
+/* Link de texto: sublinhado fino que engrossa e fica verde no hover. */
+.ink-link {
+	text-decoration: underline;
+	text-decoration-color: var(--line);
+	text-decoration-thickness: 1px;
+	text-underline-offset: 0.25em;
+	transition: text-decoration-color 0.2s ease, color 0.2s ease;
+}
+.ink-link:hover {
+	text-decoration-color: var(--accent);
+	text-decoration-thickness: 2px;
+}
+
+/* Entrada da página: uma vez, curta, e some com "reduzir movimento". */
+@keyframes rise {
+	from {
+		opacity: 0;
+		transform: translateY(14px);
+	}
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}
+.rise {
+	animation: rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+	.rise {
+		animation: none;
+	}
+	* {
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
+}
+
+/* Ponto de "agora": pulsa devagar, como um LED. */
+@keyframes led {
+	0%,
+	100% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0.35;
+	}
+}
+.led {
+	animation: led 2.4s ease-in-out infinite;
 }
 
 .stroke-text {
@@ -123,10 +204,10 @@ body {
 	}
 }
 
-/* Custom scrollbars */
+/* Custom scrollbars — follow the line token in both schemes */
 * {
 	scrollbar-width: thin;
-	scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+	scrollbar-color: var(--line) transparent;
 }
 
 *::-webkit-scrollbar {
@@ -139,30 +220,16 @@ body {
 }
 
 *::-webkit-scrollbar-thumb {
-	background: rgba(255, 255, 255, 0.15);
+	background: var(--line);
 	border-radius: 3px;
 }
 
 *::-webkit-scrollbar-thumb:hover {
-	background: rgba(255, 255, 255, 0.25);
+	background: var(--faint);
 }
 
 *::-webkit-scrollbar-corner {
 	background: transparent;
-}
-
-@media (prefers-color-scheme: light) {
-	* {
-		scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
-	}
-
-	*::-webkit-scrollbar-thumb {
-		background: rgba(0, 0, 0, 0.15);
-	}
-
-	*::-webkit-scrollbar-thumb:hover {
-		background: rgba(0, 0, 0, 0.25);
-	}
 }
 
 /* Prism.js syntax highlighting — follows site palette */

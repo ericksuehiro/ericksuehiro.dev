@@ -40,7 +40,6 @@ export default function UtilsPage() {
 }
 
 function Utils() {
-  const [mounted, setMounted] = useState(false);
   const searchParams = useSearchParams();
   const router = useRouter();
   const toolParam = searchParams.get("tool");
@@ -59,10 +58,6 @@ function Utils() {
     return [];
   });
   const { t } = useI18n();
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   // Signal the header to expand full-width
   useEffect(() => {
@@ -84,8 +79,6 @@ function Utils() {
           <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
         </svg>
       ),
-      gradient: "from-orange-400 via-rose-400 to-pink-500",
-      accentColor: "#fb7185",
     },
     {
       id: "html-preview",
@@ -96,8 +89,6 @@ function Utils() {
           <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5" />
         </svg>
       ),
-      gradient: "from-blue-400 via-indigo-400 to-violet-500",
-      accentColor: "#818cf8",
     },
     {
       id: "text-diff",
@@ -108,8 +99,6 @@ function Utils() {
           <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />
         </svg>
       ),
-      gradient: "from-emerald-400 via-teal-400 to-cyan-500",
-      accentColor: "#2dd4bf",
     },
     {
       id: "api-tester",
@@ -120,8 +109,6 @@ function Utils() {
           <path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
         </svg>
       ),
-      gradient: "from-amber-400 via-orange-400 to-red-500",
-      accentColor: "#f59e0b",
     },
     {
       id: "base64",
@@ -132,8 +119,6 @@ function Utils() {
           <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 7.5h-.75A2.25 2.25 0 004.5 9.75v7.5a2.25 2.25 0 002.25 2.25h7.5a2.25 2.25 0 002.25-2.25v-7.5a2.25 2.25 0 00-2.25-2.25h-.75m-6 3.75l3 3m0 0l3-3m-3 3V1.5m6 9h.75a2.25 2.25 0 012.25 2.25v7.5a2.25 2.25 0 01-2.25 2.25h-7.5a2.25 2.25 0 01-2.25-2.25v-.75" />
         </svg>
       ),
-      gradient: "from-cyan-400 via-sky-400 to-blue-500",
-      accentColor: "#38bdf8",
     },
   ];
 
@@ -157,99 +142,73 @@ function Utils() {
 
   const activeToolData = activeTool ? tools.find((t) => t.id === activeTool) : null;
 
-  // Card grid view — no tool selected
+  // Index view — no tool selected
   if (!activeTool) {
     return (
-      <div className="flex flex-col items-center min-h-screen w-full px-4 sm:px-6 pt-24 md:pt-32 pb-20 max-w-5xl mx-auto">
-        <div
-          className="w-full mb-16"
-          style={{
-            opacity: mounted ? 1 : 0,
-            transform: mounted ? "translateY(0)" : "translateY(20px)",
-            transition: "all 0.8s cubic-bezier(0.16, 1, 0.3, 1)",
-          }}
-        >
-          <div className="flex items-center gap-3 mb-4">
-            <div className="h-px flex-1 max-w-[40px] bg-gradient-to-r from-orange-400 to-transparent" />
-            <span className="text-xs uppercase tracking-[0.3em] opacity-40 font-medium">
-              {t.utils.label}
-            </span>
-          </div>
-          <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-none">
+      <div className="flex flex-col">
+        <section className="max-w-6xl mx-auto w-full px-5 sm:px-8 pt-28 md:pt-40 pb-16 md:pb-20">
+          <p className="rise font-mono text-[12px] uppercase tracking-[0.14em] text-[var(--faint)]">{t.utils.label}</p>
+          <h1
+            className="rise mt-6 text-[clamp(3.2rem,11vw,8rem)] font-semibold tracking-[-0.055em] leading-[0.88]"
+            style={{ animationDelay: "80ms" }}
+          >
             {t.utils.title}
           </h1>
-          <p className="mt-4 text-base opacity-40 max-w-md">
+          <p
+            className="rise mt-8 max-w-xl text-[1.2rem] md:text-[1.4rem] leading-[1.4] tracking-[-0.01em] text-[var(--muted)]"
+            style={{ animationDelay: "160ms" }}
+          >
             {t.utils.description}
           </p>
-        </div>
+        </section>
 
-        <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {sortedTools.map((tool, index) => (
-            <button
-              key={tool.id}
-              type="button"
-              onClick={() => handleSelectTool(tool.id)}
-              className="group relative block w-full text-left"
-              style={{
-                opacity: mounted ? 1 : 0,
-                transform: mounted ? "translateY(0)" : "translateY(30px)",
-                transition: `all 0.8s cubic-bezier(0.16, 1, 0.3, 1) ${0.15 + index * 0.1}s`,
-              }}
-            >
-              <div
-                className={`absolute -inset-px bg-gradient-to-r ${tool.gradient} rounded-2xl transition-opacity duration-300 opacity-0 group-hover:opacity-50`}
-              />
-              <div className="relative rounded-2xl bg-[var(--background)] p-6 transition-all duration-300 overflow-hidden h-full">
-                <div
-                  className={`absolute top-0 left-0 w-0 group-hover:w-full h-px bg-gradient-to-r ${tool.gradient} transition-all duration-500 ease-out`}
-                />
-                {/* Favorite button */}
-                <div
-                  role="button"
-                  tabIndex={0}
-                  onClick={(e) => handleToggleFavorite(e, tool.id)}
-                  onKeyDown={(e) => { if (e.key === "Enter") handleToggleFavorite(e as unknown as React.MouseEvent, tool.id); }}
-                  className="absolute top-4 right-4 z-10 w-7 h-7 rounded-lg border !border-[var(--header-border-color)] flex items-center justify-center transition-all duration-300 hover:!border-yellow-400/40 hover:bg-yellow-400/5 cursor-pointer opacity-0 group-hover:opacity-100"
-                  style={{ opacity: favorites.includes(tool.id) ? 1 : undefined }}
+        <section className="max-w-6xl mx-auto w-full px-5 sm:px-8 pb-24 md:pb-32">
+          <ul className="border-t !border-[var(--line)]">
+            {sortedTools.map((tool, index) => {
+              const fav = favorites.includes(tool.id);
+              return (
+                <li
+                  key={tool.id}
+                  className="rise border-b !border-[var(--line)]"
+                  style={{ animationDelay: `${200 + index * 60}ms` }}
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className={`w-3 h-3 transition-all duration-300 ${favorites.includes(tool.id) ? "fill-yellow-400 text-yellow-400" : "fill-none opacity-40"}`}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.562.562 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.562.562 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
-                  </svg>
-                </div>
-                <div className="relative flex flex-col gap-4">
-                  <div
-                    className={`shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br ${tool.gradient} text-white flex items-center justify-center shadow-lg transition-all duration-300 group-hover:scale-110 group-hover:-rotate-3`}
-                  >
-                    {tool.icon}
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-2 mb-1.5">
-                      <h2 className="text-lg font-bold tracking-tight">{tool.title}</h2>
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3.5 h-3.5 opacity-0 transition-all duration-300 group-hover:opacity-40 group-hover:translate-x-0.5">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                  <div className="group relative flex items-start gap-4 md:gap-8 py-6 md:py-8">
+                    <span className="hidden md:block w-8 pt-2 font-mono text-[12px] text-[var(--faint)] tabular-nums">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <span className="shrink-0 w-10 h-10 md:w-11 md:h-11 rounded-lg border !border-[var(--line)] flex items-center justify-center text-[var(--muted)] transition-colors duration-300 group-hover:text-[var(--accent-ink)] group-hover:!border-[var(--faint)] [&>svg]:w-5 [&>svg]:h-5">
+                      {tool.icon}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => handleSelectTool(tool.id)}
+                      className="flex-1 min-w-0 text-left after:absolute after:inset-0 after:content-['']"
+                    >
+                      <h2 className="text-[1.35rem] md:text-[1.6rem] font-semibold tracking-[-0.025em] leading-tight">{tool.title}</h2>
+                      <p className="mt-1.5 text-[15px] leading-relaxed text-[var(--muted)] max-w-2xl">{tool.description}</p>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={(e) => handleToggleFavorite(e, tool.id)}
+                      aria-pressed={fav}
+                      aria-label={t.utils.favorite}
+                      title={t.utils.favorite}
+                      className={`relative z-10 shrink-0 w-9 h-9 rounded-md flex items-center justify-center transition-all duration-200 hover:bg-[var(--surface)] ${
+                        fav ? "opacity-100" : "opacity-0 group-hover:opacity-100 focus-visible:opacity-100"
+                      }`}
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" strokeWidth={1.8} stroke="currentColor" className={`w-4 h-4 ${fav ? "fill-[var(--accent)] text-[var(--accent)]" : "fill-none text-[var(--faint)]"}`}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.562.562 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.562.562 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
                       </svg>
-                    </div>
-                    <p className="text-xs opacity-40 leading-relaxed">{tool.description}</p>
+                    </button>
+                    <span className="hidden sm:block pt-2 font-mono text-[var(--faint)] transition-transform duration-300 group-hover:translate-x-1 group-hover:text-[var(--accent-ink)]">→</span>
                   </div>
-                </div>
-              </div>
-            </button>
-          ))}
-        </div>
-
-        <div
-          className="mt-20 flex items-center gap-4"
-          style={{
-            opacity: mounted ? 0.2 : 0,
-            transition: "opacity 1s ease 0.6s",
-          }}
-        >
-          <div className="h-px w-12 bg-gradient-to-r from-transparent to-current" />
-          <span className="text-[10px] uppercase tracking-[0.4em]">
-            {t.utils.moreComingSoon}
-          </span>
-          <div className="h-px w-12 bg-gradient-to-l from-transparent to-current" />
-        </div>
+                </li>
+              );
+            })}
+          </ul>
+          <p className="mt-10 font-mono text-[12px] uppercase tracking-[0.14em] text-[var(--faint)]">{t.utils.moreComingSoon}</p>
+        </section>
       </div>
     );
   }
@@ -258,18 +217,19 @@ function Utils() {
   return (
     <div className="flex flex-col md:flex-row fixed inset-0 w-full pt-12 md:pt-16 bg-[var(--background)] z-40">
       {/* Mobile top bar */}
-      <div className="md:hidden shrink-0 border-b !border-[var(--header-border-color)] bg-[var(--background)]/80 backdrop-blur-xl">
+      <div className="md:hidden shrink-0 border-b !border-[var(--line)] bg-[var(--background)]">
         <div className="flex items-center gap-1 px-3 py-2 overflow-x-auto scrollbar-hide">
           <button
             type="button"
             onClick={() => setActiveTool(null)}
-            className="shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs opacity-40 hover:opacity-70 transition-opacity"
+            aria-label={t.utils.title}
+            className="shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs text-[var(--muted)] hover:text-[var(--foreground)] transition-colors"
           >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3.5 h-3.5">
               <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
             </svg>
           </button>
-          <div className="w-px h-5 bg-[var(--header-border-color)] shrink-0" />
+          <div className="w-px h-5 bg-[var(--line)] shrink-0" />
           {tools.map((tool) => {
             const isActive = activeTool === tool.id;
             return (
@@ -277,13 +237,12 @@ function Utils() {
                 key={tool.id}
                 type="button"
                 onClick={() => handleSelectTool(tool.id)}
-                className={`shrink-0 flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 ${
-                  isActive ? "bg-white/10 opacity-90" : "opacity-40 hover:opacity-60"
+                aria-current={isActive ? "page" : undefined}
+                className={`shrink-0 flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium transition-colors duration-200 ${
+                  isActive ? "bg-[var(--surface)] text-[var(--foreground)]" : "text-[var(--muted)] hover:text-[var(--foreground)]"
                 }`}
               >
-                <div className={`w-4 h-4 rounded bg-gradient-to-br ${tool.gradient} [&>svg]:w-2.5 [&>svg]:h-2.5 text-white flex items-center justify-center`}>
-                  {tool.icon}
-                </div>
+                <span className={`[&>svg]:w-3.5 [&>svg]:h-3.5 ${isActive ? "text-[var(--accent-ink)]" : ""}`}>{tool.icon}</span>
                 {tool.title}
               </button>
             );
@@ -292,11 +251,11 @@ function Utils() {
       </div>
 
       {/* Sidebar */}
-      <aside className="hidden md:flex flex-col w-56 shrink-0 border-r !border-[var(--header-border-color)] pt-6 pb-8 px-3 overflow-y-auto">
+      <aside className="hidden md:flex flex-col w-60 shrink-0 border-r !border-[var(--line)] pt-6 pb-6 px-3 overflow-y-auto">
         <button
           type="button"
           onClick={() => setActiveTool(null)}
-          className="flex items-center gap-2 px-3 py-2 mb-4 text-xs opacity-40 hover:opacity-70 transition-opacity"
+          className="flex items-center gap-2 px-3 py-2 mb-4 text-[13px] text-[var(--muted)] hover:text-[var(--foreground)] transition-colors"
         >
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3.5 h-3.5">
             <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
@@ -304,7 +263,7 @@ function Utils() {
           {t.utils.title}
         </button>
 
-        <nav className="flex flex-col gap-1">
+        <nav className="flex flex-col gap-0.5">
           {tools.map((tool) => {
             const isActive = activeTool === tool.id;
             return (
@@ -312,35 +271,25 @@ function Utils() {
                 key={tool.id}
                 type="button"
                 onClick={() => handleSelectTool(tool.id)}
-                className={`group relative flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all duration-200 ${
-                  isActive ? "bg-white/5" : "hover:bg-white/[0.03]"
+                aria-current={isActive ? "page" : undefined}
+                className={`flex items-center gap-3 px-3 py-2.5 rounded-md text-left text-[14px] transition-colors duration-200 ${
+                  isActive
+                    ? "bg-[var(--surface)] text-[var(--foreground)] font-medium"
+                    : "text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--surface)]"
                 }`}
               >
-                {/* Active indicator */}
-                <div
-                  className={`absolute left-0 top-1/2 -translate-y-1/2 w-[3px] rounded-full bg-gradient-to-b ${tool.gradient} transition-all duration-300`}
-                  style={{ height: isActive ? "60%" : "0%", opacity: isActive ? 1 : 0 }}
-                />
-                <div
-                  className={`shrink-0 w-7 h-7 rounded-lg bg-gradient-to-br ${tool.gradient} text-white flex items-center justify-center transition-all duration-200 [&>svg]:w-3.5 [&>svg]:h-3.5`}
-                  style={{ opacity: isActive ? 1 : 0.5 }}
-                >
+                <span className={`shrink-0 [&>svg]:w-4 [&>svg]:h-4 ${isActive ? "text-[var(--accent-ink)]" : "text-[var(--faint)]"}`}>
                   {tool.icon}
-                </div>
-                <span className={`text-sm font-medium transition-opacity duration-200 truncate ${isActive ? "opacity-90" : "opacity-45 group-hover:opacity-65"}`}>
-                  {tool.title}
                 </span>
+                <span className="truncate">{tool.title}</span>
               </button>
             );
           })}
         </nav>
 
-        <div className="mt-auto pt-4 px-3">
-          <div className="h-px w-full bg-[var(--header-border-color)] mb-3" />
-          <span className="text-[9px] uppercase tracking-[0.3em] opacity-20">
-            {t.utils.moreComingSoon}
-          </span>
-        </div>
+        <p className="mt-auto pt-4 px-3 border-t !border-[var(--line)] font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--faint)]">
+          {t.utils.moreComingSoon}
+        </p>
       </aside>
 
       {/* Main content */}
@@ -353,14 +302,12 @@ function Utils() {
           >
             {/* Tool header */}
             <div className="flex items-center gap-4 mb-4 shrink-0">
-              <div
-                className={`shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br ${activeToolData.gradient} text-white flex items-center justify-center shadow-lg [&>svg]:w-5 [&>svg]:h-5`}
-              >
+              <div className="shrink-0 w-10 h-10 rounded-lg border !border-[var(--line)] text-[var(--accent-ink)] flex items-center justify-center [&>svg]:w-5 [&>svg]:h-5">
                 {activeToolData.icon}
               </div>
-              <div>
-                <h1 className="text-2xl md:text-3xl font-bold tracking-tight">{activeToolData.title}</h1>
-                <p className="text-xs opacity-40 mt-0.5">{activeToolData.description}</p>
+              <div className="min-w-0">
+                <h1 className="text-2xl md:text-3xl font-semibold tracking-[-0.03em]">{activeToolData.title}</h1>
+                <p className="text-[13px] text-[var(--muted)] mt-0.5">{activeToolData.description}</p>
               </div>
             </div>
 
@@ -519,7 +466,7 @@ function PdfToText() {
               : "!border-[var(--header-border-color)] hover:!border-orange-400/30 hover:bg-orange-400/[0.02]"
           }`}
         >
-          <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-400/10 to-pink-500/10 flex items-center justify-center transition-transform duration-300 ${isDragging ? "scale-110" : ""}`}>
+          <div className={`w-16 h-16 rounded-2xl bg-[var(--surface)] flex items-center justify-center transition-transform duration-300 ${isDragging ? "scale-110" : ""}`}>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 opacity-40">
               <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
             </svg>
@@ -542,7 +489,7 @@ function PdfToText() {
           </div>
           <div className="w-full h-2 rounded-full bg-[var(--header-border-color)] overflow-hidden">
             <div
-              className="h-full rounded-full bg-gradient-to-r from-orange-400 to-pink-500 transition-all duration-300 ease-out"
+              className="h-full rounded-full bg-[var(--accent)] transition-all duration-300 ease-out"
               style={{ width: `${progress}%` }}
             />
           </div>
@@ -565,7 +512,7 @@ function PdfToText() {
         <div className="space-y-4">
           <div className="flex items-center justify-between gap-4 flex-wrap">
             <div className="flex items-center gap-3 min-w-0">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-orange-400/20 to-pink-500/20 flex items-center justify-center shrink-0">
+              <div className="w-8 h-8 rounded-lg bg-[var(--surface)] flex items-center justify-center shrink-0">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 opacity-50">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
                 </svg>
@@ -988,7 +935,7 @@ function HtmlPreview() {
 
             {/* Autocomplete dropdown — follows caret */}
             {suggestions.length > 0 && (
-              <div className="absolute z-20 w-64 bg-[#111111] border !border-emerald-500/20 rounded-lg shadow-xl shadow-black/40 overflow-hidden"
+              <div className="absolute z-20 w-64 bg-[var(--background)] border !border-[var(--line)] rounded-lg shadow-xl shadow-black/20 overflow-hidden"
                 style={{ maxHeight: "200px", top: caretPos.top + 24, left: Math.min(caretPos.left, 200) }}
               >
                 {suggestions.map((s, i) => (
@@ -998,8 +945,8 @@ function HtmlPreview() {
                     onMouseDown={(e) => { e.preventDefault(); applySuggestion(s); }}
                     className={`w-full text-left px-3 py-1.5 text-xs font-mono transition-colors duration-75 flex items-center gap-2 ${
                       i === selectedSuggestion
-                        ? "bg-emerald-500/20 text-emerald-300"
-                        : "text-gray-400 hover:bg-white/5"
+                        ? "bg-[var(--surface)] text-[var(--foreground)]"
+                        : "text-[var(--muted)] hover:bg-[var(--surface)]"
                     }`}
                   >
                     <span className={`shrink-0 w-4 h-4 rounded text-[9px] font-bold flex items-center justify-center ${
@@ -1281,7 +1228,7 @@ function ApiTester() {
           <button
             type="button"
             onClick={() => methodOpen ? closeMethodDropdown() : setMethodOpen(true)}
-            className={`w-28 h-full px-3 py-2.5 rounded-lg border !border-[var(--header-border-color)] bg-transparent text-sm font-bold focus:outline-none focus:!border-amber-400/40 transition-all duration-200 cursor-pointer flex items-center justify-between gap-2 ${METHOD_COLORS[method]} ${methodOpen ? "!border-amber-400/40" : ""}`}
+            className={`w-28 h-full px-3 py-2.5 rounded-lg border !border-[var(--header-border-color)] bg-transparent text-sm font-bold focus:outline-none focus:!border-[var(--faint)] transition-all duration-200 cursor-pointer flex items-center justify-between gap-2 ${METHOD_COLORS[method]} ${methodOpen ? "!border-amber-400/40" : ""}`}
           >
             {method}
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className={`w-3.5 h-3.5 opacity-40 transition-transform duration-200 ${methodOpen ? "rotate-180" : ""}`}>
@@ -1299,7 +1246,7 @@ function ApiTester() {
                   type="button"
                   onClick={() => { setMethod(m); closeMethodDropdown(); }}
                   className={`w-full text-left px-3 py-2 text-sm font-bold transition-colors duration-75 flex items-center gap-2 ${METHOD_COLORS[m]} ${
-                    m === method ? "bg-amber-400/10" : "hover:bg-[var(--header-border-color)]"
+                    m === method ? "bg-[var(--surface)]" : "hover:bg-[var(--header-border-color)]"
                   }`}
                 >
                   {m === method && (
@@ -1320,13 +1267,13 @@ function ApiTester() {
           onChange={(e) => setUrl(e.target.value)}
           onKeyDown={(e) => { if (e.key === "Enter") handleSend(); }}
           placeholder={strings.urlPlaceholder}
-          className="flex-1 min-w-0 px-4 py-2.5 rounded-lg border !border-[var(--header-border-color)] bg-transparent text-sm font-mono focus:outline-none focus:!border-amber-400/40 transition-all duration-200"
+          className="flex-1 min-w-0 px-4 py-2.5 rounded-lg border !border-[var(--header-border-color)] bg-transparent text-sm font-mono focus:outline-none focus:!border-[var(--faint)] transition-all duration-200"
         />
         <button
           type="button"
           onClick={handleSend}
           disabled={loading || !url.trim()}
-          className="shrink-0 px-6 py-2.5 rounded-lg bg-gradient-to-r from-amber-400 to-orange-500 text-white text-sm font-bold transition-all duration-200 hover:shadow-lg hover:shadow-amber-500/20 disabled:opacity-40 disabled:cursor-not-allowed"
+          className="shrink-0 px-6 py-2.5 rounded-lg bg-[var(--foreground)] text-[var(--background)] text-sm font-semibold transition-all duration-200 hover:opacity-85 disabled:opacity-40 disabled:cursor-not-allowed"
         >
           {loading ? strings.sending : strings.send}
         </button>
@@ -1342,7 +1289,7 @@ function ApiTester() {
               onClick={() => setActiveTab(tab)}
               className={`px-4 py-1.5 text-xs uppercase tracking-wider font-medium rounded-lg transition-all duration-200 ${
                 activeTab === tab
-                  ? "bg-amber-400/10 text-amber-400"
+                  ? "bg-[var(--surface)] text-[var(--foreground)]"
                   : "opacity-40 hover:opacity-70"
               }`}
             >
@@ -1373,14 +1320,14 @@ function ApiTester() {
                 value={h.key}
                 onChange={(e) => updateHeader(i, "key", e.target.value)}
                 placeholder={strings.headerKey}
-                className="flex-1 min-w-0 px-3 py-2 rounded-lg border !border-[var(--header-border-color)] bg-transparent text-xs font-mono focus:outline-none focus:!border-amber-400/40 transition-all duration-200"
+                className="flex-1 min-w-0 px-3 py-2 rounded-lg border !border-[var(--header-border-color)] bg-transparent text-xs font-mono focus:outline-none focus:!border-[var(--faint)] transition-all duration-200"
               />
               <input
                 type="text"
                 value={h.value}
                 onChange={(e) => updateHeader(i, "value", e.target.value)}
                 placeholder={strings.headerValue}
-                className="flex-1 min-w-0 px-3 py-2 rounded-lg border !border-[var(--header-border-color)] bg-transparent text-xs font-mono focus:outline-none focus:!border-amber-400/40 transition-all duration-200"
+                className="flex-1 min-w-0 px-3 py-2 rounded-lg border !border-[var(--header-border-color)] bg-transparent text-xs font-mono focus:outline-none focus:!border-[var(--faint)] transition-all duration-200"
               />
               <button
                 type="button"
@@ -1408,7 +1355,7 @@ function ApiTester() {
 
       {/* Body tab */}
       {activeTab === "body" && (
-        <div className="relative rounded-xl border !border-[var(--header-border-color)] overflow-hidden h-[180px] bg-[#111111]/30 transition-all duration-300 focus-within:!border-amber-400/40">
+        <div className="relative rounded-xl border !border-[var(--header-border-color)] overflow-hidden h-[180px] bg-[var(--surface)] transition-all duration-300 focus-within:!border-[var(--faint)]">
           <pre
             ref={bodyHighlightRef}
             className="absolute inset-0 p-4 text-sm font-mono leading-relaxed overflow-hidden pointer-events-none m-0"
@@ -1472,7 +1419,7 @@ function ApiTester() {
           )}
 
           {/* Response body */}
-          <div className="group/resp rounded-xl border !border-[var(--header-border-color)] overflow-hidden relative bg-[#111111]/30">
+          <div className="group/resp rounded-xl border !border-[var(--header-border-color)] overflow-hidden relative bg-[var(--surface)]">
             <button
               type="button"
               onClick={() => {
@@ -1887,7 +1834,7 @@ function Base64Tool() {
               type="button"
               onClick={() => { setMode(m); handleClear(); }}
               className={`px-4 py-2 text-sm font-medium transition-all duration-200 ${
-                mode === m ? "bg-white/10 opacity-90" : "opacity-40 hover:opacity-60"
+                mode === m ? "bg-[var(--surface)] opacity-90" : "opacity-40 hover:opacity-60"
               }`}
             >
               {m === "encode" ? strings.encode : strings.decode}
@@ -1903,7 +1850,7 @@ function Base64Tool() {
                 type="button"
                 onClick={() => { setInputType(type); setOutput(""); setImagePreview(null); setError(null); }}
                 className={`px-4 py-2 text-sm font-medium transition-all duration-200 ${
-                  inputType === type ? "bg-white/10 opacity-90" : "opacity-40 hover:opacity-60"
+                  inputType === type ? "bg-[var(--surface)] opacity-90" : "opacity-40 hover:opacity-60"
                 }`}
               >
                 {type === "text" ? strings.text : strings.image}
@@ -1936,7 +1883,7 @@ function Base64Tool() {
               value={textInput}
               onChange={(e) => setTextInput(e.target.value)}
               placeholder={strings.inputPlaceholder}
-              className="w-full h-[300px] p-4 rounded-xl border !border-[var(--header-border-color)] bg-transparent text-sm font-mono leading-relaxed opacity-70 focus:opacity-100 focus:outline-none focus:!border-sky-400/40 transition-all duration-300 resize-none"
+              className="w-full h-[300px] p-4 rounded-xl border !border-[var(--header-border-color)] bg-transparent text-sm font-mono leading-relaxed opacity-70 focus:opacity-100 focus:outline-none focus:!border-[var(--faint)] transition-all duration-300 resize-none"
               spellCheck={false}
             />
           )}
@@ -1980,7 +1927,7 @@ function Base64Tool() {
               value={base64Input}
               onChange={(e) => setBase64Input(e.target.value)}
               placeholder={strings.base64Placeholder}
-              className="w-full h-[300px] p-4 rounded-xl border !border-[var(--header-border-color)] bg-transparent text-sm font-mono leading-relaxed opacity-70 focus:opacity-100 focus:outline-none focus:!border-sky-400/40 transition-all duration-300 resize-none"
+              className="w-full h-[300px] p-4 rounded-xl border !border-[var(--header-border-color)] bg-transparent text-sm font-mono leading-relaxed opacity-70 focus:opacity-100 focus:outline-none focus:!border-[var(--faint)] transition-all duration-300 resize-none"
               spellCheck={false}
             />
           )}

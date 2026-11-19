@@ -11,9 +11,17 @@ export default {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        muted: "var(--muted)",
+        faint: "var(--faint)",
+        surface: "var(--surface)",
+        line: "var(--line)",
+        accent: "var(--accent)",
+        "accent-ink": "var(--accent-ink)",
       },
       fontFamily: {
-        comic: ['"Comic Sans MS"', 'cursive'],
+        sans: ["var(--font-geist)", "ui-sans-serif", "system-ui", "sans-serif"],
+        mono: ["var(--font-geist-mono)", "ui-monospace", "SFMono-Regular", "monospace"],
+        comic: ['"Comic Sans MS"', "cursive"],
       },
     },
   },
